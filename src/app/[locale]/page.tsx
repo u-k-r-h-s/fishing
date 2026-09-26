@@ -6,7 +6,6 @@ import { ProcessSection } from "@/components/sections/ProcessSection";
 import { VideoShowcaseSection } from "@/components/video/VideoShowcaseSection";
 import { OffersSection } from "@/components/offers/OffersSection";
 import { AboutSection } from "@/components/sections/AboutSection";
-import { OwnerSection } from "@/components/sections/OwnerSection";
 import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
 import { SocialShowcaseSection } from "@/components/social/SocialShowcaseSection";
 import { ServiceAreasSection } from "@/components/sections/ServiceAreasSection";
@@ -30,7 +29,6 @@ import {
 } from "@/lib/data/homepage";
 import { getVideos } from "@/lib/data/videos";
 import { getActiveOffers } from "@/lib/data/offers";
-import { getOwner } from "@/lib/data/owner";
 import { getReels } from "@/lib/data/social";
 import { getServiceAreas } from "@/lib/data/serviceAreas";
 import { getTestimonials } from "@/lib/data/testimonials";
@@ -72,7 +70,6 @@ export default async function HomePage({
     videos,
     activeOffers,
     aboutContent,
-    owner,
     whyChooseUsContent,
     reels,
     serviceAreas,
@@ -87,7 +84,6 @@ export default async function HomePage({
     getVideos(),
     getActiveOffers(),
     getAboutContent(),
-    getOwner(),
     getWhyChooseUsContent(),
     getReels(),
     getServiceAreas(),
@@ -108,7 +104,6 @@ export default async function HomePage({
       <VideoShowcaseSection locale={locale} dict={dict} featured={featuredVideo} supporting={supportingVideos} />
       <OffersSection locale={locale} dict={dict} offers={activeOffers} />
       <AboutSection locale={locale} dict={dict} content={aboutContent} />
-      <OwnerSection locale={locale} dict={dict} owner={owner} />
       <WhyChooseUsSection locale={locale} content={whyChooseUsContent} />
       <SocialShowcaseSection locale={locale} dict={dict} posts={reels} />
       <ServiceAreasSection locale={locale} dict={dict} serviceAreas={serviceAreas} />
