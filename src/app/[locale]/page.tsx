@@ -12,8 +12,6 @@ import { SocialShowcaseSection } from "@/components/social/SocialShowcaseSection
 import { ServiceAreasSection } from "@/components/sections/ServiceAreasSection";
 import { TestimonialsSection } from "@/components/testimonials/TestimonialsSection";
 import { FAQSection } from "@/components/faq/FAQSection";
-import { CTASection } from "@/components/sections/CTASection";
-import { ContactSection } from "@/components/contact/ContactSection";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { getFAQPageSchema } from "@/lib/structuredData";
 import { buildMetadata } from "@/lib/seo";
@@ -29,7 +27,6 @@ import {
   getProcessContent,
   getAboutContent,
   getWhyChooseUsContent,
-  getFinalCtaContent,
 } from "@/lib/data/homepage";
 import { getVideos } from "@/lib/data/videos";
 import { getActiveOffers } from "@/lib/data/offers";
@@ -81,7 +78,6 @@ export default async function HomePage({
     serviceAreas,
     testimonials,
     faqs,
-    finalCtaContent,
   ] = await Promise.all([
     getBusinessConfig(),
     getFeaturedFish(),
@@ -97,7 +93,6 @@ export default async function HomePage({
     getServiceAreas(),
     getTestimonials(),
     getFaqs(),
-    getFinalCtaContent(),
   ]);
 
   const featuredVideo = videos.find((v) => v.featured) ?? videos[0] ?? null;
@@ -119,14 +114,6 @@ export default async function HomePage({
       <ServiceAreasSection locale={locale} dict={dict} serviceAreas={serviceAreas} />
       <TestimonialsSection locale={locale} dict={dict} testimonials={testimonials} />
       <FAQSection locale={locale} dict={dict} faqs={faqs} />
-      <CTASection
-        locale={locale}
-        dict={dict}
-        businessName={business.name}
-        title={localize(finalCtaContent.heading, locale) || undefined}
-        description={localize(finalCtaContent.description, locale)?.replace("{business}", business.name) || undefined}
-      />
-      <ContactSection locale={locale} dict={dict} business={business} showOwner />
     </>
   );
 }

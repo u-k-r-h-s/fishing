@@ -44,16 +44,29 @@ export function VideoPlayer({ src, poster, title, dict, className, autoPlay = fa
     return () => observer.disconnect();
   }, []);
 
+  const prevSrc = useRef(src);
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !loaded) return;
+
+    // Switching `src` on an already-mounted <video> (e.g. picking a
+    // different reel in SocialPhoneMockup) doesn't restart playback on its
+    // own — the browser needs an explicit reload for the new source, or it
+    // just sits paused until something else (like this effect re-running
+    // for an unrelated reason, e.g. scrolling out of and back into view)
+    // happens to call .play() again.
+    if (prevSrc.current !== src) {
+      prevSrc.current = src;
+      video.load();
+    }
 
     if (inView && (autoPlay || playing)) {
       video.play().catch(() => undefined);
     } else {
       video.pause();
     }
-  }, [inView, loaded, autoPlay, playing]);
+  }, [inView, loaded, autoPlay, playing, src]);
 
   const handlePlayClick = () => {
     setPlaying(true);
