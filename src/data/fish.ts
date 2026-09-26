@@ -32,6 +32,10 @@ export interface Fish {
   longDescription: Localized<string>;
   /** Display price string, e.g. "₹450/kg" — never translated */
   price: string;
+  /** Free-text weight info, e.g. "800g - 1.2kg" or "Approx 1kg each" — never translated */
+  weight: string;
+  /** Extra photos beyond the main `image` — at least 4, admin-managed */
+  gallery: string[];
   available: boolean;
   /** Show this fish in the homepage "Featured" rail */
   featured: boolean;
@@ -56,6 +60,8 @@ export const fish: Fish[] = [
       hi: "रोहू एक हल्के स्वाद वाली मीठे पानी की मछली है, जो अपनी नरम बनावट और बहुमुखी उपयोग के लिए पसंद की जाती है। यह पारंपरिक करी, फ्राई या घर के सामान्य पकवान में बेहद स्वादिष्ट लगती है। हमारे काउंटर तक पहुँचने से पहले हर मछली को मज़बूती और साफ़, चमकदार आँखों के आधार पर हाथ से चुना जाता है।",
     },
     price: "₹450/kg",
+    weight: "800g - 1.5kg",
+    gallery: [],
     available: true,
     featured: true,
     freshnessNote: {
@@ -76,6 +82,8 @@ export const fish: Fish[] = [
       hi: "कतला अपने मज़बूत, मांसल गूदे के लिए जानी जाती है जो धीमी आँच पर पकी करी और ग्रेवी में अच्छी तरह बना रहता है। कई घरों की रसोई में यह एक मुख्य विकल्प है, बड़े परिवार के भोजन के लिए एक भरोसेमंद पसंद।",
     },
     price: "₹420/kg",
+    weight: "1kg - 2kg",
+    gallery: [],
     available: true,
     featured: true,
     freshnessNote: {
@@ -96,6 +104,8 @@ export const fish: Fish[] = [
       hi: "हिल्सा (इलिश) अपने गाढ़े, मक्खन जैसे स्वाद के लिए जानी जाती है और कई क्षेत्रीय व्यंजनों में इसे विशेष माना जाता है। सरसों की ग्रेवी में भाप में पकाकर या हल्का फ्राई करके इसका सबसे अच्छा स्वाद मिलता है — यह एक मौसमी विशेष मछली है जिसे हम ताज़गी सुनिश्चित करने के लिए सावधानी से लाते हैं।",
     },
     price: "₹900/kg",
+    weight: "500g - 1kg",
+    gallery: [],
     available: true,
     featured: true,
     freshnessNote: {
@@ -116,6 +126,8 @@ export const fish: Fish[] = [
       hi: "हमारे झींगों को आकार के अनुसार छाँटा जाता है और पकड़ से लेकर काउंटर तक बर्फ़ पर रखा जाता है। चाहे झटपट स्टिर-फ्राई बनानी हो या उत्सव की झींगा करी, हम अनुरोध पर उन्हें साफ़ और नस-रहित कर देते हैं ताकि आप तुरंत खाना बनाना शुरू कर सकें।",
     },
     price: "₹600/kg",
+    weight: "Sold by weight — small or jumbo",
+    gallery: [],
     available: true,
     featured: true,
     freshnessNote: {
@@ -136,6 +148,8 @@ export const fish: Fish[] = [
       hi: "पॉम्फ्रेट का नाज़ुक, लगभग बिना काँटे वाला सफ़ेद गूदा इसे फ्राई, ग्रिल या साधारण मसालों के साथ हल्के तवा-फ्राई के लिए सबसे पसंदीदा मछलियों में से एक बनाता है। हर खेप के आकार और ताज़गी पर हमारी पूरी नज़र रहती है।",
     },
     price: "₹700/kg",
+    weight: "600g - 1kg",
+    gallery: [],
     available: true,
     featured: false,
     freshnessNote: {
@@ -156,6 +170,8 @@ export const fish: Fish[] = [
       hi: "सुरमई (किंगफ़िश) एक मज़बूत, लगभग बिना काँटे वाली मछली है जो पैन-फ्राई या तंदूरी शैली के लिए आदर्श है। आपकी पसंद की मोटाई में स्टेक काटी जाती है — विशेष सप्ताहांत भोजन के लिए पसंदीदा।",
     },
     price: "₹800/kg",
+    weight: "Cut to preferred steak thickness",
+    gallery: [],
     available: true,
     featured: false,
     freshnessNote: {
@@ -176,6 +192,8 @@ export const fish: Fish[] = [
       hi: "तिलापिया का हल्का स्वाद और जल्दी पकने का गुण इसे रोज़ के लिए एक व्यावहारिक विकल्प बनाता है। यह मैरिनेड और मसालों को अच्छी तरह सोखती है, जिससे यह हफ़्ते के दिनों के खाने के लिए एक लचीला विकल्प बनती है।",
     },
     price: "₹380/kg",
+    weight: "700g - 1kg",
+    gallery: [],
     available: true,
     featured: false,
     freshnessNote: {
@@ -196,6 +214,8 @@ export const fish: Fish[] = [
       hi: "बासा के फ़िलेट नरम, लगभग बिना काँटे के होते हैं और जल्दी पक जाते हैं — काँटों या स्केलिंग की परेशानी के बिना आसान मछली भोजन चाहने वालों के लिए सुविधाजनक विकल्प।",
     },
     price: "₹350/kg",
+    weight: "Fillets — 200g packs",
+    gallery: [],
     available: false,
     featured: false,
     freshnessNote: {

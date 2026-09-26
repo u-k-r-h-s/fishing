@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 import { CallButton } from "@/components/shared/CallButton";
-import { ImageReveal } from "@/components/animations/ImageReveal";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { FishGrid } from "@/components/fish/FishGrid";
+import { FishImageGallery } from "@/components/fish/FishImageGallery";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { getBreadcrumbSchema, getProductSchema } from "@/lib/structuredData";
 import { buildFishMetadata } from "@/lib/seo";
@@ -91,24 +90,20 @@ export default async function FishDetailPage({
           </nav>
 
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
-            <ImageReveal className="relative aspect-square w-full rounded-[1.75rem] bg-mint/20 shadow-lg">
-              <Image
-                src={item.image}
-                alt={name}
-                fill
-                priority
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
-              />
-              <span
-                className={cn(
-                  "absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold shadow-sm",
-                  item.available ? "bg-aqua text-navy" : "bg-dark/70 text-offwhite"
-                )}
-              >
-                {item.available ? dict.common.availableToday : dict.common.currentlyUnavailable}
-              </span>
-            </ImageReveal>
+            <FishImageGallery
+              images={[item.image, ...item.gallery].filter((src, index, arr) => arr.indexOf(src) === index)}
+              alt={name}
+              badge={
+                <span
+                  className={cn(
+                    "absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold shadow-sm",
+                    item.available ? "bg-aqua text-navy" : "bg-dark/70 text-offwhite"
+                  )}
+                >
+                  {item.available ? dict.common.availableToday : dict.common.currentlyUnavailable}
+                </span>
+              }
+            />
 
             <ScrollReveal>
               <p className="text-xs font-bold uppercase tracking-widest text-ocean">
@@ -117,7 +112,10 @@ export default async function FishDetailPage({
               <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-dark sm:text-4xl">
                 {name}
               </h1>
-              <p className="mt-4 text-2xl font-bold text-navy">{item.price}</p>
+              <p className="mt-4 flex flex-wrap items-baseline gap-x-3">
+                <span className="text-2xl font-bold text-navy">{item.price}</span>
+                {item.weight && <span className="text-sm font-medium text-dark/50">{item.weight}</span>}
+              </p>
               <p className="mt-5 text-base leading-relaxed text-dark/70">
                 {localize(item.longDescription, locale)}
               </p>

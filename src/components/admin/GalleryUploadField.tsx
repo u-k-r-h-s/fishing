@@ -20,10 +20,13 @@ export function GalleryUploadField({
   fieldName,
   bucket,
   defaultValue,
+  minImages,
 }: {
   fieldName: string;
   bucket: string;
   defaultValue: string[];
+  /** When set, shows how many more photos are needed until this component's own hint text is satisfied — the caller (the surrounding form) is still responsible for actually blocking submission. */
+  minImages?: number;
 }) {
   const [urls, setUrls] = useState<string[]>(defaultValue);
   const [status, setStatus] = useState<"idle" | "uploading" | "error">("idle");
@@ -119,10 +122,20 @@ export function GalleryUploadField({
         )}
       </div>
 
-      <p className={cn("mt-2 text-xs", status === "error" ? "text-red-600" : "text-dark/50")}>
+      <p
+        className={cn(
+          "mt-2 text-xs",
+          status === "error" || (minImages !== undefined && urls.length < minImages)
+            ? "text-red-600"
+            : "text-dark/50"
+        )}
+      >
         {status === "uploading"
           ? "Uploading…"
-          : error ?? `${urls.length}/${MAX_IMAGES} images — PNG, JPEG, WebP, or GIF, up to 5MB each.`}
+          : error ??
+            (minImages !== undefined && urls.length < minImages
+              ? `${urls.length}/${MAX_IMAGES} images — at least ${minImages} required (${minImages - urls.length} more needed).`
+              : `${urls.length}/${MAX_IMAGES} images — PNG, JPEG, WebP, or GIF, up to 5MB each.`)}
       </p>
 
       <input type="hidden" name={fieldName} value={JSON.stringify(urls)} readOnly />

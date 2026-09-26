@@ -16,6 +16,18 @@ function slugify(value: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+const MIN_GALLERY_IMAGES = 4;
+
+function parseGalleryJson(formData: FormData): string[] {
+  try {
+    const raw = String(formData.get("gallery_json") ?? "[]");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((url): url is string => typeof url === "string" && url.length > 0) : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function saveFishAction(
   _prevState: FishFormState,
   formData: FormData
@@ -34,6 +46,15 @@ export async function saveFishAction(
   }
 
   const price = Number.parseFloat(String(formData.get("price") ?? "0"));
+  const weight = String(formData.get("weight") ?? "").trim();
+  if (!weight) {
+    return { error: "Weight is required." };
+  }
+
+  const gallery = parseGalleryJson(formData);
+  if (gallery.length < MIN_GALLERY_IMAGES) {
+    return { error: `Please upload at least ${MIN_GALLERY_IMAGES} photos (${gallery.length}/${MIN_GALLERY_IMAGES} so far).` };
+  }
 
   const { error } = await adminUpsertFish({
     ...(id ? { id } : {}),
@@ -48,7 +69,9 @@ export async function saveFishAction(
     freshness_note_hi: String(formData.get("freshness_note_hi") ?? ""),
     price: Number.isFinite(price) ? price : 0,
     price_unit: String(formData.get("price_unit") ?? "kg"),
+    weight,
     image_url: String(formData.get("image_url") ?? ""),
+    gallery,
     availability: formData.get("availability") === "on",
     featured: formData.get("featured") === "on",
     display_order: Number.parseInt(String(formData.get("display_order") ?? "0"), 10) || 0,

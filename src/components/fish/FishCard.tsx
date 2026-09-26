@@ -40,7 +40,10 @@ export function FishCard({ item, locale, dict }: { item: Fish; locale: Locale; d
         <Link href={localizedPath(locale, `/fresh-fish/${item.id}`)} className="mt-1">
           <h3 className="text-lg font-bold text-dark hover:text-ocean">Fresh {name}</h3>
         </Link>
-        <p className="mt-1.5 text-sm font-semibold text-dark/80">{item.price}</p>
+        <p className="mt-1.5 flex flex-wrap items-baseline gap-x-2 text-sm font-semibold text-dark/80">
+          <span>{item.price}</span>
+          {item.weight && <span className="text-xs font-normal text-dark/50">{item.weight}</span>}
+        </p>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-dark/60">
           {localize(item.description, locale)}
         </p>

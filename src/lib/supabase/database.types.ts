@@ -79,6 +79,7 @@ export interface Database {
           freshness_note_hi: string;
           price: number;
           price_unit: string;
+          weight: string;
           image_url: string;
           gallery: Json;
           availability: boolean;

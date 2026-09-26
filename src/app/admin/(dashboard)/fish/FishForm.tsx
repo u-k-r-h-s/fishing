@@ -1,25 +1,49 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
 import Link from "next/link";
 import { saveFishAction, type FishFormState } from "./actions";
 import { FormField, TextInput, TextArea, Checkbox } from "@/components/admin/FormField";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { GalleryUploadField } from "@/components/admin/GalleryUploadField";
 import type { AdminFishRow } from "@/lib/data/fish";
 
 const initialState: FishFormState = { error: null };
+const MIN_GALLERY_IMAGES = 4;
 
 export function FishForm({ fish }: { fish?: AdminFishRow }) {
   const [state, formAction] = useActionState(saveFishAction, initialState);
+  const [clientError, setClientError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const galleryField = formRef.current?.elements.namedItem("gallery_json") as HTMLInputElement | null;
+    let count = 0;
+    try {
+      count = galleryField ? (JSON.parse(galleryField.value) as unknown[]).length : 0;
+    } catch {
+      count = 0;
+    }
+    if (count < MIN_GALLERY_IMAGES) {
+      e.preventDefault();
+      setClientError(`Please upload at least ${MIN_GALLERY_IMAGES} photos (${count}/${MIN_GALLERY_IMAGES} so far).`);
+      return;
+    }
+    setClientError(null);
+  }
+
+  const initialGallery = Array.isArray(fish?.gallery)
+    ? (fish.gallery as unknown[]).filter((url): url is string => typeof url === "string")
+    : [];
 
   return (
-    <form action={formAction} className="max-w-3xl space-y-8">
+    <form ref={formRef} action={formAction} onSubmit={handleSubmit} className="max-w-3xl space-y-8">
       {fish && <input type="hidden" name="id" value={fish.id} />}
 
-      {state.error && (
+      {(clientError || state.error) && (
         <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-          {state.error}
+          {clientError || state.error}
         </p>
       )}
 
@@ -98,15 +122,33 @@ export function FishForm({ fish }: { fish?: AdminFishRow }) {
           <FormField label="Unit" htmlFor="price_unit">
             <TextInput id="price_unit" name="price_unit" defaultValue={fish?.price_unit ?? "kg"} />
           </FormField>
+          <FormField
+            label="Weight"
+            htmlFor="weight"
+            hint="e.g. 800g - 1.2kg, or Approx 1kg each"
+          >
+            <TextInput id="weight" name="weight" defaultValue={fish?.weight} required />
+          </FormField>
           <FormField label="Display order" htmlFor="display_order" hint="Lower numbers show first.">
             <TextInput id="display_order" name="display_order" type="number" defaultValue={fish?.display_order ?? 0} />
           </FormField>
-          <div className="flex items-end gap-6 pb-2">
+          <div className="flex items-end gap-6 pb-2 sm:col-span-2">
             <Checkbox label="Available" name="availability" defaultChecked={fish?.availability ?? true} />
             <Checkbox label="Featured on homepage" name="featured" defaultChecked={fish?.featured ?? false} />
           </div>
           <div className="sm:col-span-2">
-            <ImageUploadField name="image_url" label="Photo" bucket="fish-images" defaultValue={fish?.image_url} />
+            <ImageUploadField name="image_url" label="Main photo" bucket="fish-images" defaultValue={fish?.image_url} />
+          </div>
+          <div className="sm:col-span-2">
+            <p className="mb-2 text-sm font-medium text-dark">
+              More photos <span className="font-normal text-dark/50">(at least {MIN_GALLERY_IMAGES} required)</span>
+            </p>
+            <GalleryUploadField
+              fieldName="gallery_json"
+              bucket="fish-images"
+              defaultValue={initialGallery}
+              minImages={MIN_GALLERY_IMAGES}
+            />
           </div>
         </div>
       </section>

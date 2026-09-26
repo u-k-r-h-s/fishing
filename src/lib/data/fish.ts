@@ -16,6 +16,10 @@ function mapRow(row: FishRow): Fish {
     description: localizedField(row.short_description_en, row.short_description_hi),
     longDescription: localizedField(row.description_en, row.description_hi),
     price: row.price_unit ? `₹${row.price}/${row.price_unit}` : `₹${row.price}`,
+    weight: row.weight || "",
+    gallery: Array.isArray(row.gallery)
+      ? (row.gallery as unknown[]).filter((url): url is string => typeof url === "string")
+      : [],
     available: row.availability,
     featured: row.featured,
     freshnessNote: localizedField(row.freshness_note_en, row.freshness_note_hi),
