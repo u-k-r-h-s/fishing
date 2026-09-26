@@ -1,5 +1,6 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseEnv } from "@/lib/supabase/env";
+import { timeoutFetch } from "@/lib/supabase/timeoutFetch";
 import type { Database } from "@/lib/supabase/database.types";
 
 /**
@@ -11,5 +12,5 @@ import type { Database } from "@/lib/supabase/database.types";
  */
 export function createStaticClient() {
   const { url, publishableKey } = getSupabaseEnv();
-  return createSupabaseClient<Database>(url, publishableKey);
+  return createSupabaseClient<Database>(url, publishableKey, { global: { fetch: timeoutFetch } });
 }

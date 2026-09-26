@@ -38,17 +38,15 @@ export function Hero({
     }
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      tl.fromTo(eyebrowRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 })
-        .fromTo(
-          headingRef.current,
-          { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, duration: 0.7 },
-          "-=0.3"
-        )
-        .fromTo(subRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
-        .fromTo(ctaRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 }, "-=0.35");
+      // Kept short (finishes well under 0.5s) and entirely local to this
+      // component — it never waits on Supabase, images, or the underwater
+      // scene's fish/boat animation. Hero content is real, non-empty markup
+      // from first paint; this is just a quick polish fade on top of it.
+      gsap.fromTo(
+        [eyebrowRef.current, headingRef.current, subRef.current, ctaRef.current],
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.03, ease: "power2.out" }
+      );
     }, rootRef);
 
     return () => ctx.revert();

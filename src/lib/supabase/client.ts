@@ -2,6 +2,7 @@
 
 import { createBrowserClient } from "@supabase/ssr";
 import { getSupabaseEnv } from "@/lib/supabase/env";
+import { timeoutFetch } from "@/lib/supabase/timeoutFetch";
 import type { Database } from "@/lib/supabase/database.types";
 
 /**
@@ -12,5 +13,5 @@ import type { Database } from "@/lib/supabase/database.types";
  */
 export function createClient() {
   const { url, publishableKey } = getSupabaseEnv();
-  return createBrowserClient<Database>(url, publishableKey);
+  return createBrowserClient<Database>(url, publishableKey, { global: { fetch: timeoutFetch } });
 }

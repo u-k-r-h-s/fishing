@@ -32,3 +32,16 @@ export function getSupabaseEnv() {
 
   return { url, publishableKey };
 }
+
+/**
+ * True only when real env vars are present. `timeoutFetch` uses this to
+ * skip the network call entirely when Supabase isn't configured, rather
+ * than letting every one of a page's dozen-plus data calls independently
+ * attempt (and fail) a DNS lookup for the placeholder host — with many
+ * calls in flight at once, those lookups queue behind Node's small DNS
+ * thread pool and add up to several real seconds even though each
+ * individual failure is "fast".
+ */
+export function isSupabaseConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+}

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseEnv } from "@/lib/supabase/env";
+import { timeoutFetch } from "@/lib/supabase/timeoutFetch";
 
 /**
  * Refreshes the Supabase auth session on a request/response pair, per the
@@ -15,6 +16,7 @@ export async function refreshSupabaseSession(request: NextRequest, response: Nex
   const { url, publishableKey } = getSupabaseEnv();
 
   const supabase = createServerClient(url, publishableKey, {
+    global: { fetch: timeoutFetch },
     cookies: {
       getAll() {
         return request.cookies.getAll();

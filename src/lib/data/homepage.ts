@@ -61,15 +61,43 @@ export interface HeroContent {
   ctaSecondaryLabel: Localized<string>;
 }
 
+/**
+ * The hero is above-the-fold, primary UI — it must never render blank just
+ * because the `hero` row in `homepage_content` hasn't been filled in yet (or
+ * Supabase is briefly unavailable). These defaults are placeholder site copy
+ * (matching the rest of the pre-CMS demo content), not real business
+ * information, and get overridden field-by-field the moment an admin fills
+ * in the real copy via /admin/homepage.
+ */
+const DEFAULT_HERO_CONTENT: HeroContent = {
+  eyebrow: { en: "FRESH EVERY DAY · CAREFULLY SELECTED", hi: "हर दिन ताज़ी · सावधानी से चुनी गई" },
+  headlineLine1: { en: "Fresh Fish.", hi: "ताज़ी मछली।" },
+  headlineLine2: { en: "Honest Quality.", hi: "ईमानदार गुणवत्ता।" },
+  subheading: {
+    en: "Freshly selected fish for everyday meals, prepared with care.",
+    hi: "रोज़मर्रा के भोजन के लिए ताज़ी चुनी गई मछली, पूरी सावधानी से तैयार की गई।",
+  },
+  ctaPrimaryLabel: { en: "Explore Fresh Fish", hi: "ताज़ी मछली देखें" },
+  ctaSecondaryLabel: { en: "WhatsApp Us", hi: "व्हाट्सएप करें" },
+};
+
+/** Uses `cms` only when it actually has English copy — an empty/missing CMS field falls back whole (both languages) rather than showing an empty string next to a translated default. */
+function withDefault(cms: Localized<string>, fallback: Localized<string>): Localized<string> {
+  return cms.en.trim().length > 0 ? cms : fallback;
+}
+
 export async function getHeroContent(): Promise<HeroContent> {
   const content = await getSection("hero");
   return {
-    eyebrow: readLocalized(content, "eyebrow"),
-    headlineLine1: readLocalized(content, "headline_line1"),
-    headlineLine2: readLocalized(content, "headline_line2"),
-    subheading: readLocalized(content, "subheading"),
-    ctaPrimaryLabel: readLocalized(content, "cta_primary_label"),
-    ctaSecondaryLabel: readLocalized(content, "cta_secondary_label"),
+    eyebrow: withDefault(readLocalized(content, "eyebrow"), DEFAULT_HERO_CONTENT.eyebrow),
+    headlineLine1: withDefault(readLocalized(content, "headline_line1"), DEFAULT_HERO_CONTENT.headlineLine1),
+    headlineLine2: withDefault(readLocalized(content, "headline_line2"), DEFAULT_HERO_CONTENT.headlineLine2),
+    subheading: withDefault(readLocalized(content, "subheading"), DEFAULT_HERO_CONTENT.subheading),
+    ctaPrimaryLabel: withDefault(readLocalized(content, "cta_primary_label"), DEFAULT_HERO_CONTENT.ctaPrimaryLabel),
+    ctaSecondaryLabel: withDefault(
+      readLocalized(content, "cta_secondary_label"),
+      DEFAULT_HERO_CONTENT.ctaSecondaryLabel
+    ),
   };
 }
 

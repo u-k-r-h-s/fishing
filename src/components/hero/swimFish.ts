@@ -50,7 +50,13 @@ export function buildSwim(container: HTMLElement, isMobile: boolean): FishContro
     const travel = width * 0.7 + cfg.size * 2;
     const startX = cfg.direction === 1 ? -cfg.size * 1.5 : width + cfg.size * 1.5;
     const endX = cfg.direction === 1 ? startX + travel : startX - travel;
-    const facingFlip = cfg.direction === -1 ? -1 : 1;
+    // The illustration's un-flipped (scaleX > 0) orientation has the head on
+    // its LEFT and tail on its RIGHT (see FishIllustration.tsx's geometry —
+    // eye at low x, tail path at high x). direction === 1 means the fish
+    // travels rightward, so it must be flipped (scaleX < 0) to face right;
+    // direction === -1 travels leftward, which already matches the
+    // un-flipped head-left orientation.
+    const facingFlip = cfg.direction === 1 ? -1 : 1;
 
     gsap.set(el, {
       x: startX,
