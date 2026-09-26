@@ -1,4 +1,7 @@
+"use client";
+
 import { getCallLink } from "@/lib/whatsapp";
+import { useBusinessContact } from "@/components/shared/BusinessConfigProvider";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/getDictionary";
@@ -21,10 +24,11 @@ export function CallButton({
   className?: string;
 }) {
   const dict = getDictionary(locale);
+  const { phone } = useBusinessContact();
 
   return (
     <a
-      href={getCallLink()}
+      href={getCallLink(phone)}
       aria-label={label ?? dict.common.callNow}
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200",

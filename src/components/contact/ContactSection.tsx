@@ -29,6 +29,9 @@ export function ContactSection({
   showOwner?: boolean;
 }) {
   const socials = socialConfig.filter((item) => business[item.key]);
+  const fullAddress = [business.address, business.city, business.state, business.country]
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <section className="py-20 sm:py-24">
@@ -46,7 +49,7 @@ export function ContactSection({
 
         <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <ScrollReveal className="lg:col-span-2">
-            <div className="grid h-full grid-cols-1 gap-6 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-dark/5 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-8 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-dark/5 sm:grid-cols-2">
               <div>
                 <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ocean">
                   <Icon name="map-pin" className="h-4 w-4" /> {dict.contact.visitUs}
@@ -58,6 +61,19 @@ export function ContactSection({
                   <br />
                   {business.country}
                 </p>
+
+                {fullAddress && (
+                  <div className="mt-4 aspect-[4/3] w-full overflow-hidden rounded-xl ring-1 ring-dark/10">
+                    <iframe
+                      title={`Map to ${business.name}`}
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&output=embed`}
+                      className="h-full w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                )}
+
                 {business.googleMaps && (
                   <a
                     href={business.googleMaps}
@@ -70,54 +86,56 @@ export function ContactSection({
                 )}
               </div>
 
-              <div>
-                <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ocean">
-                  <Icon name="clock" className="h-4 w-4" /> {dict.contact.openingHours}
-                </h3>
-                <ul className="mt-3 space-y-1 text-sm text-dark/70">
-                  {business.openingHours.map((entry) => (
-                    <li key={entry.days}>
-                      <span className="font-medium text-dark">{entry.days}:</span> {entry.hours}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="sm:col-span-2">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-ocean">
-                  {dict.contact.phoneEmail}
-                </h3>
-                <div className="mt-3 flex flex-col gap-1 text-sm text-dark/70">
-                  <a href={`tel:${business.phone}`} className="hover:text-ocean">
-                    {business.phoneDisplay}
-                  </a>
-                  <a href={`mailto:${business.email}`} className="hover:text-ocean">
-                    {business.email}
-                  </a>
-                </div>
-              </div>
-
-              {socials.length > 0 && (
-                <div className="sm:col-span-2">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider text-ocean">
-                    {dict.contact.followUs}
+              <div className="flex flex-col gap-8">
+                <div>
+                  <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ocean">
+                    <Icon name="clock" className="h-4 w-4" /> {dict.contact.openingHours}
                   </h3>
-                  <div className="mt-3 flex gap-3">
-                    {socials.map((social) => (
-                      <a
-                        key={social.key}
-                        href={business[social.key]}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={social.label}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-dark/10 text-dark/70 transition-colors hover:border-aqua hover:text-ocean"
-                      >
-                        <Icon name={social.key} className="h-4 w-4" />
-                      </a>
+                  <ul className="mt-3 space-y-1 text-sm text-dark/70">
+                    {business.openingHours.map((entry) => (
+                      <li key={entry.days}>
+                        <span className="font-medium text-dark">{entry.days}:</span> {entry.hours}
+                      </li>
                     ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-ocean">
+                    {dict.contact.phoneEmail}
+                  </h3>
+                  <div className="mt-3 flex flex-col gap-1 text-sm text-dark/70">
+                    <a href={`tel:${business.phone}`} className="hover:text-ocean">
+                      {business.phoneDisplay}
+                    </a>
+                    <a href={`mailto:${business.email}`} className="hover:text-ocean">
+                      {business.email}
+                    </a>
                   </div>
                 </div>
-              )}
+
+                {socials.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-ocean">
+                      {dict.contact.followUs}
+                    </h3>
+                    <div className="mt-3 flex gap-3">
+                      {socials.map((social) => (
+                        <a
+                          key={social.key}
+                          href={business[social.key]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={social.label}
+                          className="flex h-10 w-10 items-center justify-center rounded-full border border-dark/10 text-dark/70 transition-colors hover:border-aqua hover:text-ocean"
+                        >
+                          <Icon name={social.key} className="h-4 w-4" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </ScrollReveal>
 

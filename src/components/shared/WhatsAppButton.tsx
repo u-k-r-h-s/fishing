@@ -1,4 +1,7 @@
+"use client";
+
 import { getWhatsAppLink } from "@/lib/whatsapp";
+import { useBusinessContact } from "@/components/shared/BusinessConfigProvider";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/getDictionary";
@@ -23,10 +26,11 @@ export function WhatsAppButton({
   className?: string;
 }) {
   const dict = getDictionary(locale);
+  const { whatsapp, name } = useBusinessContact();
 
   return (
     <a
-      href={getWhatsAppLink(locale, fishName)}
+      href={getWhatsAppLink(locale, whatsapp, name, fishName)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label ?? (fishName ? `WhatsApp us about ${fishName}` : dict.common.whatsappUs)}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSiteUrl, localizedPath, absoluteUrl } from "@/lib/utils";
 import { getLocalBusinessSchema } from "@/lib/structuredData";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { BusinessConfigProvider } from "@/components/shared/BusinessConfigProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MobileContactBar } from "@/components/layout/MobileContactBar";
@@ -74,7 +75,7 @@ export default async function LocaleLayout({
   const [business, serviceAreas] = await Promise.all([getBusinessConfig(), getServiceAreas()]);
 
   return (
-    <>
+    <BusinessConfigProvider name={business.name} whatsapp={business.whatsapp} phone={business.phone}>
       <JsonLd data={getLocalBusinessSchema(locale, business, serviceAreas)} />
       <a
         href="#main-content"
@@ -88,6 +89,6 @@ export default async function LocaleLayout({
       </main>
       <Footer locale={locale} dict={dict} business={business} serviceAreas={serviceAreas} />
       <MobileContactBar locale={locale} />
-    </>
+    </BusinessConfigProvider>
   );
 }

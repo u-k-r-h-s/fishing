@@ -1,8 +1,7 @@
-import { business } from "@/data/business";
 import type { Locale } from "@/i18n/locales";
 import { getDictionary, tf } from "@/i18n/getDictionary";
 
-/** Strips everything except leading "+" and digits, for wa.me links. */
+/** Strips everything except digits, for wa.me links (which reject "+", spaces, etc). */
 function toWhatsAppNumber(raw: string): string {
   return raw.replace(/[^\d]/g, "");
 }
@@ -10,17 +9,19 @@ function toWhatsAppNumber(raw: string): string {
 /**
  * Builds a wa.me link with a prefilled message in the given locale.
  * Falls back to the general enquiry message when no fish name is given.
+ * `whatsapp`/`businessName` must be the real, Supabase-backed values (see
+ * BusinessConfigProvider) — never the static placeholder demo data.
  */
-export function getWhatsAppLink(locale: Locale, fishName?: string): string {
-  const number = toWhatsAppNumber(business.whatsapp);
+export function getWhatsAppLink(locale: Locale, whatsapp: string, businessName: string, fishName?: string): string {
+  const number = toWhatsAppNumber(whatsapp);
   const dict = getDictionary(locale);
   const message = fishName
-    ? tf(dict.whatsapp.messageFish, { business: business.name, name: fishName })
-    : tf(dict.whatsapp.messageGeneral, { business: business.name });
+    ? tf(dict.whatsapp.messageFish, { business: businessName, name: fishName })
+    : tf(dict.whatsapp.messageGeneral, { business: businessName });
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
-export function getCallLink(): string {
-  return `tel:${business.phone}`;
+export function getCallLink(phone: string): string {
+  return `tel:${phone}`;
 }
