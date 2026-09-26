@@ -176,6 +176,7 @@ export interface Database {
           bio_en: string;
           bio_hi: string;
           image_url: string;
+          image_position: string;
           instagram_url: string;
           active: boolean;
           updated_at: string;

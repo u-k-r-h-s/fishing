@@ -25,6 +25,7 @@ export async function saveOwnerAction(
     bio_en: String(formData.get("bio_en") ?? ""),
     bio_hi: String(formData.get("bio_hi") ?? ""),
     image_url: String(formData.get("image_url") ?? ""),
+    image_position: String(formData.get("image_position") ?? "50% 50%"),
     instagram_url: String(formData.get("instagram_url") ?? ""),
     active: true,
   });

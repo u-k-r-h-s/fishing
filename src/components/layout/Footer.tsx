@@ -45,15 +45,17 @@ export function Footer({
         <div>
           <p className="flex items-center gap-2 text-lg font-extrabold text-offwhite">
             {business.logo ? (
-              <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
-                <Image src={business.logo} alt="" fill sizes="32px" className="object-cover" />
+              <span className="relative h-10 w-36 shrink-0">
+                <Image src={business.logo} alt={business.name} fill sizes="144px" className="object-contain object-left" />
               </span>
             ) : (
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint text-navy">
-                <Icon name="fish" className="h-4 w-4" />
-              </span>
+              <>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint text-navy">
+                  <Icon name="fish" className="h-4 w-4" />
+                </span>
+                {business.name}
+              </>
             )}
-            {business.name}
           </p>
           <p className="mt-4 text-sm leading-relaxed text-offwhite/70">
             {localize(business.description, locale)}

@@ -159,6 +159,8 @@ export async function getAboutContent(): Promise<AboutContent> {
     image: readString(content, "image_url", "/images/about/placeholder.svg"),
     imageAlt: readString(content, "image_alt", "Fresh fish being prepared"),
     galleryImages: readStringArray(content, "gallery_images"),
+    galleryHeading: readLocalized(content, "gallery_heading"),
+    galleryDescription: readLocalized(content, "gallery_description"),
   };
 }
 

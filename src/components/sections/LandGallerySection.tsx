@@ -5,7 +5,10 @@ import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { Icon } from "@/components/shared/Icon";
+import { localize } from "@/i18n/types";
+import type { Locale } from "@/i18n/locales";
 import type { Dictionary } from "@/i18n/getDictionary";
+import type { Localized } from "@/i18n/types";
 
 /**
  * A dynamic slider for the About page's land/premises photos — admin-managed
@@ -16,15 +19,26 @@ import type { Dictionary } from "@/i18n/getDictionary";
  * library — this project only pulls in GSAP for real animation needs.
  */
 export function LandGallerySection({
+  locale,
   dict,
   images,
+  heading,
+  description,
 }: {
+  locale: Locale;
   dict: Dictionary;
   images: string[];
+  /** Admin-written heading — falls back to a generic dictionary heading when empty. */
+  heading?: Localized<string>;
+  /** Admin-written description (e.g. the story of the land) — hidden entirely when empty. */
+  description?: Localized<string>;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   if (images.length === 0) return null;
+
+  const localizedHeading = heading ? localize(heading, locale) : "";
+  const localizedDescription = description ? localize(description, locale) : "";
 
   function scrollByOne(direction: 1 | -1) {
     const track = trackRef.current;
@@ -38,13 +52,16 @@ export function LandGallerySection({
     <section className="py-20 sm:py-24">
       <Container>
         <ScrollReveal className="flex flex-wrap items-end justify-between gap-4">
-          <div>
+          <div className="max-w-2xl">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-ocean">
               {dict.about.galleryEyebrow}
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-dark sm:text-4xl">
-              {dict.about.galleryHeading}
+              {localizedHeading || dict.about.galleryHeading}
             </h2>
+            {localizedDescription && (
+              <p className="mt-4 text-base leading-relaxed text-dark/70">{localizedDescription}</p>
+            )}
           </div>
 
           {images.length > 1 && (

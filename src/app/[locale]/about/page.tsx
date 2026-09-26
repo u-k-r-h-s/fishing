@@ -77,7 +77,13 @@ export default async function AboutPage({
       </section>
 
       <AboutSection locale={locale} dict={dict} content={aboutContent} full />
-      <LandGallerySection dict={dict} images={aboutContent.galleryImages} />
+      <LandGallerySection
+        locale={locale}
+        dict={dict}
+        images={aboutContent.galleryImages}
+        heading={aboutContent.galleryHeading}
+        description={aboutContent.galleryDescription}
+      />
       <OwnerSection locale={locale} dict={dict} owner={owner} />
       <WhyChooseUsSection locale={locale} content={whyChooseUsContent} />
       <TestimonialsSection locale={locale} dict={dict} testimonials={testimonials} />

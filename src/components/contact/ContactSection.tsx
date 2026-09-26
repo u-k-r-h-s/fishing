@@ -131,6 +131,7 @@ export function ContactSection({
                     fill
                     sizes="(min-width: 1024px) 33vw, 100vw"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    style={{ objectPosition: business.owner.imagePosition }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-5">

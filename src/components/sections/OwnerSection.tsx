@@ -27,6 +27,7 @@ export function OwnerSection({
             fill
             sizes="340px"
             className="rounded-full object-cover"
+            style={{ objectPosition: owner.imagePosition }}
           />
         </ImageReveal>
 

@@ -29,15 +29,21 @@ export function Navbar({
           className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-navy"
         >
           {business.logo ? (
-            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full">
-              <Image src={business.logo} alt="" fill sizes="36px" className="object-cover" />
+            // A wordmark logo already carries the business name visually, so
+            // it replaces (not joins) the text label. object-contain + a
+            // fixed-size box that's wider than tall means the full logo
+            // always shows, whatever its own aspect ratio — never cropped.
+            <span className="relative h-9 w-32 shrink-0">
+              <Image src={business.logo} alt={business.name} fill sizes="128px" className="object-contain object-left" />
             </span>
           ) : (
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-mint">
-              <Icon name="fish" className="h-5 w-5" />
-            </span>
+            <>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-mint">
+                <Icon name="fish" className="h-5 w-5" />
+              </span>
+              {business.name}
+            </>
           )}
-          {business.name}
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">

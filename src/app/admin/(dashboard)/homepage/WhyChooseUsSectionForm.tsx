@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveWhyChooseUsSectionAction, type HomepageSectionState } from "./actions";
 import { TextInput } from "@/components/admin/FormField";
 import { SubmitButton } from "@/components/admin/SubmitButton";
+import { SaveToast } from "@/components/admin/SaveToast";
 import { IconedListEditor } from "./IconedListEditor";
 
 const initialState: HomepageSectionState = { error: null, success: false };
@@ -15,12 +16,11 @@ interface Json {
 }
 
 export function WhyChooseUsSectionForm({ content }: { content: Json }) {
-  const [state, formAction] = useActionState(saveWhyChooseUsSectionAction, initialState);
+  const [state, formAction, isPending] = useActionState(saveWhyChooseUsSectionAction, initialState);
 
   return (
     <form action={formAction} className="space-y-4">
-      {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
-      {state.success && <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">Saved.</p>}
+      <SaveToast success={state.success} error={state.error} pending={isPending} />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <TextInput name="eyebrow_en" placeholder="Eyebrow (English)" defaultValue={content.eyebrow?.en} />

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveSettingsAction, type SettingsFormState } from "./actions";
 import { FormField, TextInput, TextArea, Select } from "@/components/admin/FormField";
 import { SubmitButton } from "@/components/admin/SubmitButton";
+import { SaveToast } from "@/components/admin/SaveToast";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { OpeningHoursEditor } from "./OpeningHoursEditor";
 import type { AdminBusinessSettingsRow } from "@/lib/data/business";
@@ -11,23 +12,14 @@ import type { AdminBusinessSettingsRow } from "@/lib/data/business";
 const initialState: SettingsFormState = { error: null, success: false };
 
 export function SettingsForm({ settings }: { settings: AdminBusinessSettingsRow | null }) {
-  const [state, formAction] = useActionState(saveSettingsAction, initialState);
+  const [state, formAction, isPending] = useActionState(saveSettingsAction, initialState);
   const openingHours = Array.isArray(settings?.opening_hours)
     ? (settings.opening_hours as Array<{ days: string; hours: string }>)
     : [];
 
   return (
     <form action={formAction} className="max-w-3xl space-y-8">
-      {state.error && (
-        <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-          {state.error}
-        </p>
-      )}
-      {state.success && (
-        <p role="status" className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-          Saved.
-        </p>
-      )}
+      <SaveToast success={state.success} error={state.error} pending={isPending} />
 
       <section className="rounded-xl border border-dark/10 bg-white p-5">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-dark/50">Identity</h2>

@@ -30,6 +30,8 @@ export interface Owner {
   role: string;
   /** Path under /public, e.g. "/images/owner/owner.jpg" */
   image: string;
+  /** CSS object-position value, e.g. "50% 30%" — lets the admin recenter the crop instead of always centering it. */
+  imagePosition: string;
   bio: Localized<string>;
   /** Optional — leave "" to hide */
   instagram?: string;
@@ -111,6 +113,7 @@ export const business: BusinessConfig = {
     name: "Demo Owner Name",
     role: "Founder",
     image: "/images/owner/owner.svg",
+    imagePosition: "50% 50%",
     bio: {
       en: "I grew up around the harbour and started this counter to bring the same fish my own family trusts to yours — hand-picked every morning, no shortcuts. Placeholder bio — replace with the real owner's story.",
       hi: "मैं बंदरगाह के आस-पास बड़ा हुआ और यही भरोसेमंद मछली अब आपके परिवार तक पहुँचाने के लिए यह काउंटर शुरू किया — हर सुबह हाथ से चुनी गई, बिना किसी शॉर्टकट के। यह एक नमूना परिचय है — असली मालिक की कहानी से बदलें।",

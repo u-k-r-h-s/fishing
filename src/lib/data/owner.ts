@@ -11,6 +11,7 @@ const FALLBACK_OWNER: Owner = {
   name: "",
   role: "",
   image: "/images/owner/placeholder.svg",
+  imagePosition: "50% 50%",
   bio: { en: "", hi: "" },
   instagram: "",
 };
@@ -20,6 +21,7 @@ function mapRow(row: OwnerRow): Owner {
     name: row.name_en,
     role: row.role_en,
     image: row.image_url || "/images/owner/placeholder.svg",
+    imagePosition: row.image_position || "50% 50%",
     bio: localizedField(row.bio_en, row.bio_hi),
     instagram: row.instagram_url || "",
   };

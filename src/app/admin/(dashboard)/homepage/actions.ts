@@ -88,6 +88,8 @@ export async function saveAboutSectionAction(
     image_url: String(formData.get("image_url") ?? ""),
     image_alt: String(formData.get("image_alt") ?? ""),
     gallery_images: galleryImages.filter((url) => typeof url === "string" && url.length > 0),
+    gallery_heading: localized(formData, "gallery_heading"),
+    gallery_description: localized(formData, "gallery_description"),
   });
   if (error) return { error, success: false };
   revalidatePath("/", "layout");
