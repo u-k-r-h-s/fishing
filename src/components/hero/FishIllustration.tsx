@@ -4,36 +4,21 @@ import { useEffect, useRef, useState } from "react";
 import type { HeroFishSpecies } from "./fishConfig";
 
 /**
- * ============================================================
- *  REQUIRED ASSETS — NOT YET IN THE REPOSITORY
- * ============================================================
- * This renders a photographic, transparent-background fish cutout. It
- * deliberately replaced the earlier hand-drawn SVG illustrations (gradient-
- * filled vector shapes), which read as cartoon/vector art rather than real
- * fish — see git history for that version if it's ever needed for
- * reference.
+ * Renders a photographic, transparent-background fish cutout from
+ * public/images/fish/hero/{species.id}.webp — see the README in that folder
+ * for what each asset is, where it came from, and the license/attribution
+ * that comes with it (they're sourced Wikimedia Commons photos for now, not
+ * commissioned photography).
  *
- * Drop one photo per species at:
+ * Convention: every asset faces RIGHT (head on the image's right edge, tail
+ * on the left) — swimFish.ts's facingFlip assumes this when deciding which
+ * way to mirror a fish for its swim direction. Replacing an asset with one
+ * that faces left needs a matching change there.
  *
- *   public/images/fish/hero/rohu.webp
- *   public/images/fish/hero/katla.webp
- *   public/images/fish/hero/tilapia.webp
- *   public/images/fish/hero/pomfret.webp
- *   public/images/fish/hero/surmai.webp
- *
- * Each file must be:
- * - a real fish photograph, cut out with a transparent background
- *   (WebP preferred; PNG also works — this component doesn't care which,
- *   as long as the filename matches the species id above)
- * - side profile, isolated (no plate/ice/hand/hook/water/background/text)
- * - facing RIGHT — head on the image's right edge, tail on the left.
- *   swimFish.ts's facingFlip assumes this convention when deciding which
- *   way to mirror a fish for its swim direction; if your source photos
- *   face left instead, flip that convention in swimFish.ts to match.
- *
- * Until a real photo exists at a given path, this renders nothing (not the
- * old SVG art, and not a visible placeholder box) — check the Network tab
- * or console for 404s on the paths above to see which assets are missing.
+ * If a species' file is ever missing (e.g. deleted, or a new species added
+ * to fishConfig.ts without art yet), this renders nothing rather than a
+ * visible placeholder or the old SVG art — check the console for a 404 on
+ * that species' path.
  */
 export function FishIllustration({
   species,
