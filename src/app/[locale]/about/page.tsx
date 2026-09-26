@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/shared/Container";
 import { AboutSection } from "@/components/sections/AboutSection";
+import { LandGallerySection } from "@/components/sections/LandGallerySection";
 import { OwnerSection } from "@/components/sections/OwnerSection";
 import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
 import { TestimonialsSection } from "@/components/testimonials/TestimonialsSection";
@@ -76,6 +77,7 @@ export default async function AboutPage({
       </section>
 
       <AboutSection locale={locale} dict={dict} content={aboutContent} full />
+      <LandGallerySection dict={dict} images={aboutContent.galleryImages} />
       <OwnerSection locale={locale} dict={dict} owner={owner} />
       <WhyChooseUsSection locale={locale} content={whyChooseUsContent} />
       <TestimonialsSection locale={locale} dict={dict} testimonials={testimonials} />

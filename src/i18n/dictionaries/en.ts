@@ -111,6 +111,8 @@ const en = {
   },
   about: {
     eyebrow: "Our Story",
+    galleryEyebrow: "Our Place",
+    galleryHeading: "A Look Around Our Land",
   },
   owner: {
     eyebrow: "Meet the People Behind the Catch",

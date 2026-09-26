@@ -10,6 +10,7 @@ type BusinessSettingsRow = Database["public"]["Tables"]["business_settings"]["Ro
 
 const FALLBACK: Omit<BusinessConfig, "owner"> = {
   name: "OceanFresh Fish",
+  logo: "",
   tagline: { en: "", hi: "" },
   description: { en: "", hi: "" },
   phone: "",
@@ -33,6 +34,7 @@ const FALLBACK: Omit<BusinessConfig, "owner"> = {
 function mapRow(row: BusinessSettingsRow): Omit<BusinessConfig, "owner"> {
   return {
     name: row.business_name,
+    logo: row.logo_url || "",
     tagline: localizedField(row.tagline_en, row.tagline_hi),
     description: localizedField(row.description_en, row.description_hi),
     phone: row.phone,

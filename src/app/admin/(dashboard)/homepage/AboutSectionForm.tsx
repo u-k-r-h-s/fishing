@@ -5,6 +5,7 @@ import { saveAboutSectionAction, type HomepageSectionState } from "./actions";
 import { TextInput } from "@/components/admin/FormField";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { GalleryUploadField } from "@/components/admin/GalleryUploadField";
 import { ParagraphsEditor } from "./ParagraphsEditor";
 
 const initialState: HomepageSectionState = { error: null, success: false };
@@ -14,6 +15,7 @@ interface Json {
   paragraphs?: { en?: string[]; hi?: string[] };
   image_url?: string;
   image_alt?: string;
+  gallery_images?: string[];
 }
 
 export function AboutSectionForm({ content }: { content: Json }) {
@@ -40,6 +42,17 @@ export function AboutSectionForm({ content }: { content: Json }) {
 
       <ImageUploadField name="image_url" label="Image" bucket="site-assets" defaultValue={content.image_url} />
       <TextInput name="image_alt" placeholder="Image alt text" defaultValue={content.image_alt} />
+
+      <div>
+        <p className="mb-2 text-sm font-medium text-dark">
+          Land / premises gallery (shown as a slider on the About page)
+        </p>
+        <GalleryUploadField
+          fieldName="gallery_images_json"
+          bucket="site-assets"
+          defaultValue={content.gallery_images ?? []}
+        />
+      </div>
 
       <SubmitButton>Save about section</SubmitButton>
     </form>

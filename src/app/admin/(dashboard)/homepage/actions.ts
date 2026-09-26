@@ -77,6 +77,8 @@ export async function saveAboutSectionAction(
 ): Promise<HomepageSectionState> {
   const paragraphs = parseJsonList(formData, "paragraphs_json") as Array<{ en: string; hi: string }>;
 
+  const galleryImages = parseJsonList(formData, "gallery_images_json") as string[];
+
   const { error } = await adminUpsertHomepageContent("about", {
     heading: localized(formData, "heading"),
     paragraphs: {
@@ -85,6 +87,7 @@ export async function saveAboutSectionAction(
     },
     image_url: String(formData.get("image_url") ?? ""),
     image_alt: String(formData.get("image_alt") ?? ""),
+    gallery_images: galleryImages.filter((url) => typeof url === "string" && url.length > 0),
   });
   if (error) return { error, success: false };
   revalidatePath("/", "layout");

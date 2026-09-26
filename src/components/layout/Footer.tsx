@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { navLinks } from "@/data/navigation";
 import { Container } from "@/components/shared/Container";
 import { Icon } from "@/components/shared/Icon";
@@ -43,9 +44,15 @@ export function Footer({
       <Container className="grid gap-10 pt-16 pb-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="flex items-center gap-2 text-lg font-extrabold text-offwhite">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint text-navy">
-              <Icon name="fish" className="h-4 w-4" />
-            </span>
+            {business.logo ? (
+              <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
+                <Image src={business.logo} alt="" fill sizes="32px" className="object-cover" />
+              </span>
+            ) : (
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint text-navy">
+                <Icon name="fish" className="h-4 w-4" />
+              </span>
+            )}
             {business.name}
           </p>
           <p className="mt-4 text-sm leading-relaxed text-offwhite/70">

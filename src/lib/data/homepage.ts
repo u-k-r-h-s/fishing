@@ -37,6 +37,13 @@ function readString(source: unknown, key: string, fallback = ""): string {
   return typeof value === "string" ? value : fallback;
 }
 
+/** Reads a plain (non-localized) string[] out of an untyped jsonb blob, e.g. a gallery's list of image URLs. */
+function readStringArray(source: unknown, key: string): string[] {
+  if (!source || typeof source !== "object") return [];
+  const value = (source as Record<string, unknown>)[key];
+  return Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
+}
+
 async function getSection(key: string): Promise<unknown> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -151,6 +158,7 @@ export async function getAboutContent(): Promise<AboutContent> {
     paragraphs: readLocalizedArray(content, "paragraphs"),
     image: readString(content, "image_url", "/images/about/placeholder.svg"),
     imageAlt: readString(content, "image_alt", "Fresh fish being prepared"),
+    galleryImages: readStringArray(content, "gallery_images"),
   };
 }
 

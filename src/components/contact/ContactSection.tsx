@@ -47,18 +47,6 @@ export function ContactSection({
         <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <ScrollReveal className="lg:col-span-2">
             <div className="grid h-full grid-cols-1 gap-6 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-dark/5 sm:grid-cols-2">
-              {showOwner && (
-                <div className="flex items-center gap-4 sm:col-span-2">
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full ring-2 ring-mint/60">
-                    <Image src={business.owner.image} alt={business.owner.name} fill sizes="64px" className="object-cover" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-dark">{business.owner.name}</p>
-                    <p className="text-xs text-dark/50">{business.owner.role}</p>
-                  </div>
-                </div>
-              )}
-
               <div>
                 <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ocean">
                   <Icon name="map-pin" className="h-4 w-4" /> {dict.contact.visitUs}
@@ -133,18 +121,41 @@ export function ContactSection({
             </div>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.1}>
-            <div className="flex h-full flex-col justify-center gap-4 rounded-2xl bg-navy p-8 text-offwhite shadow-sm">
-              <h3 className="text-lg font-bold">{dict.contact.readyToOrder}</h3>
-              <p className="text-sm text-offwhite/70">{dict.contact.readyToOrderBody}</p>
-              <WhatsAppButton locale={locale} variant="light" className="w-full" />
-              <CallButton
-                locale={locale}
-                variant="outline"
-                className="w-full border-offwhite/20 text-offwhite hover:border-aqua hover:text-aqua"
-              />
-            </div>
-          </ScrollReveal>
+          <div className="flex flex-col gap-6">
+            {showOwner && (
+              <ScrollReveal>
+                <div className="group relative aspect-square w-full overflow-hidden rounded-2xl shadow-sm ring-1 ring-dark/5">
+                  <Image
+                    src={business.owner.image}
+                    alt={business.owner.name}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <p className="text-lg font-extrabold text-offwhite">{business.owner.name}</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-offwhite/70">
+                      {business.owner.role}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            )}
+
+            <ScrollReveal delay={0.1}>
+              <div className="flex h-full flex-col justify-center gap-4 rounded-2xl bg-navy p-8 text-offwhite shadow-sm">
+                <h3 className="text-lg font-bold">{dict.contact.readyToOrder}</h3>
+                <p className="text-sm text-offwhite/70">{dict.contact.readyToOrderBody}</p>
+                <WhatsAppButton locale={locale} variant="light" className="w-full" />
+                <CallButton
+                  locale={locale}
+                  variant="outline"
+                  className="w-full border-offwhite/20 text-offwhite hover:border-aqua hover:text-aqua"
+                />
+              </div>
+            </ScrollReveal>
+          </div>
         </div>
       </Container>
     </section>

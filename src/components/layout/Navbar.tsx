@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { navLinks } from "@/data/navigation";
 import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
@@ -27,9 +28,15 @@ export function Navbar({
           href={localizedPath(locale, "/")}
           className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-navy"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-mint">
-            <Icon name="fish" className="h-5 w-5" />
-          </span>
+          {business.logo ? (
+            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full">
+              <Image src={business.logo} alt="" fill sizes="36px" className="object-cover" />
+            </span>
+          ) : (
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-mint">
+              <Icon name="fish" className="h-5 w-5" />
+            </span>
+          )}
           {business.name}
         </Link>
 

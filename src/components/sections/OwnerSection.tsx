@@ -42,8 +42,8 @@ export function OwnerSection({
           </p>
           <div className="mt-6 flex items-center gap-4">
             <div>
-              <p className="text-base font-bold text-dark">{owner.name}</p>
-              <p className="text-sm text-dark/50">{owner.role}</p>
+              <h3 className="text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">{owner.name}</h3>
+              <p className="mt-1 text-sm font-medium uppercase tracking-wide text-dark/50">{owner.role}</p>
             </div>
             {owner.instagram && (
               <a

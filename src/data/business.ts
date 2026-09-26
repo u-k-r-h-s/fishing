@@ -38,6 +38,8 @@ export interface Owner {
 export interface BusinessConfig {
   name: string;
   legalName?: string;
+  /** Public URL of an uploaded logo image — empty string means "no logo yet, use the icon badge". */
+  logo: string;
   tagline: Localized<string>;
   description: Localized<string>;
 
@@ -68,6 +70,7 @@ export interface BusinessConfig {
 export const business: BusinessConfig = {
   name: "OceanFresh Fish",
   legalName: "OceanFresh Fish (Demo Business)",
+  logo: "",
   tagline: {
     en: "Freshness You Can Trust",
     hi: "ऐसी ताज़गी जिस पर आप भरोसा कर सकें",

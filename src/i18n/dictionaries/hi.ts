@@ -99,6 +99,8 @@ const hi = {
   },
   about: {
     eyebrow: "हमारी कहानी",
+    galleryEyebrow: "हमारी जगह",
+    galleryHeading: "हमारी ज़मीन की एक झलक",
   },
   owner: {
     eyebrow: "पकड़ के पीछे के लोग",

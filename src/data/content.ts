@@ -17,6 +17,8 @@ export interface AboutContent {
   paragraphs: Localized<string[]>;
   image: string;
   imageAlt: string;
+  /** Extra photos (e.g. the land/premises) shown as a slider on the /about page — 0 to 10 images, admin-managed. */
+  galleryImages: string[];
 }
 
 export const aboutContent: AboutContent = {
@@ -38,6 +40,7 @@ export const aboutContent: AboutContent = {
   },
   image: "/images/about/about-fresh-selection.svg",
   imageAlt: "Hand-selected fresh fish being prepared for sale",
+  galleryImages: [],
 };
 
 export interface WhyChooseUsItem {
