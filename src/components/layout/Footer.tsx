@@ -1,23 +1,46 @@
 import Link from "next/link";
-import { business } from "@/data/business";
 import { navLinks } from "@/data/navigation";
-import { serviceAreas } from "@/data/serviceAreas";
 import { Container } from "@/components/shared/Container";
 import { Icon } from "@/components/shared/Icon";
+import { localize } from "@/i18n/types";
+import type { Localized } from "@/i18n/types";
+import { localizedPath } from "@/lib/utils";
+import type { Locale } from "@/i18n/locales";
+import type { Dictionary } from "@/i18n/getDictionary";
+import type { BusinessConfig } from "@/data/business";
 
-const socialLinks = (business: { instagram: string; facebook: string; youtube: string }) =>
+const socialLinks = (biz: { instagram: string; facebook: string; youtube: string }) =>
   [
-    { name: "instagram" as const, href: business.instagram, label: "Instagram" },
-    { name: "facebook" as const, href: business.facebook, label: "Facebook" },
-    { name: "youtube" as const, href: business.youtube, label: "YouTube" },
+    { name: "instagram" as const, href: biz.instagram, label: "Instagram" },
+    { name: "facebook" as const, href: biz.facebook, label: "Facebook" },
+    { name: "youtube" as const, href: biz.youtube, label: "YouTube" },
   ].filter((item) => item.href);
 
-export function Footer() {
+export function Footer({
+  locale,
+  dict,
+  business,
+  serviceAreas,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  business: BusinessConfig;
+  serviceAreas: Localized<string>[];
+}) {
   const socials = socialLinks(business);
 
   return (
-    <footer className="border-t border-dark/5 bg-navy text-offwhite/80">
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="relative border-t border-dark/5 bg-navy text-offwhite/80">
+      <svg
+        aria-hidden="true"
+        className="absolute -top-px left-0 h-6 w-full text-offwhite"
+        viewBox="0 0 1200 24"
+        preserveAspectRatio="none"
+      >
+        <path d="M0 24 Q 150 0, 300 24 T 600 24 T 900 24 T 1200 24 V0 H0 Z" fill="currentColor" />
+      </svg>
+
+      <Container className="grid gap-10 pt-16 pb-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="flex items-center gap-2 text-lg font-extrabold text-offwhite">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint text-navy">
@@ -26,7 +49,7 @@ export function Footer() {
             {business.name}
           </p>
           <p className="mt-4 text-sm leading-relaxed text-offwhite/70">
-            {business.description}
+            {localize(business.description, locale)}
           </p>
           {socials.length > 0 && (
             <div className="mt-5 flex gap-3">
@@ -48,13 +71,13 @@ export function Footer() {
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-aqua">
-            Quick Links
+            {dict.footer.quickLinks}
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-offwhite/70 hover:text-offwhite">
-                  {link.label}
+                <Link href={localizedPath(locale, link.href)} className="text-offwhite/70 hover:text-offwhite">
+                  {dict.nav[link.labelKey]}
                 </Link>
               </li>
             ))}
@@ -62,7 +85,9 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wider text-aqua">Contact</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-aqua">
+            {dict.footer.contact}
+          </p>
           <ul className="mt-4 space-y-3 text-sm text-offwhite/70">
             <li>
               <a href={`tel:${business.phone}`} className="hover:text-offwhite">
@@ -85,7 +110,7 @@ export function Footer() {
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-aqua">
-            Opening Hours
+            {dict.footer.openingHours}
           </p>
           <ul className="mt-4 space-y-2 text-sm text-offwhite/70">
             {business.openingHours.map((entry) => (
@@ -99,18 +124,20 @@ export function Footer() {
           </ul>
 
           <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-aqua">
-            Service Areas
+            {dict.footer.serviceAreas}
           </p>
-          <p className="mt-3 text-sm text-offwhite/70">{serviceAreas.join(", ")}</p>
+          <p className="mt-3 text-sm text-offwhite/70">
+            {serviceAreas.map((area) => localize(area, locale)).join(", ")}
+          </p>
         </div>
       </Container>
 
       <div className="border-t border-offwhite/10 py-6">
         <Container className="flex flex-col items-center justify-between gap-2 text-xs text-offwhite/50 sm:flex-row">
           <p>
-            &copy; {new Date().getFullYear()} {business.name}. All rights reserved.
+            &copy; {new Date().getFullYear()} {business.name}. {dict.footer.rights}
           </p>
-          <p>Demo content — for a fresh fish business template.</p>
+          <p>{dict.footer.demoNotice}</p>
         </Container>
       </div>
     </footer>

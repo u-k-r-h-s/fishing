@@ -49,6 +49,22 @@ function shrimpSilhouette(cx, cy, scale) {
   </g>`;
 }
 
+function personSilhouette(cx, cy, scale) {
+  return `
+  <g transform="translate(${cx}, ${cy}) scale(${scale})" fill="rgba(248,250,252,0.92)">
+    <circle cx="0" cy="-70" r="52" />
+    <path d="M-120 130c8-70 60-120 120-120s112 50 120 120c-30 20-78 34-120 34s-90-14-120-34Z" />
+  </g>`;
+}
+
+function playIconOverlay(cx, cy, r) {
+  return `
+  <g>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="rgba(6,42,58,0.55)" />
+    <path d="M${cx - r * 0.28} ${cy - r * 0.42} L${cx - r * 0.28} ${cy + r * 0.42} L${cx + r * 0.48} ${cy} Z" fill="rgba(248,250,252,0.95)" />
+  </g>`;
+}
+
 function card({ width, height, colors, label, caption, silhouette }) {
   const [from, to] = colors;
   const gradientId = `g-${label.toLowerCase().replace(/\s+/g, "-")}`;
@@ -82,6 +98,9 @@ mkdirSync(join(publicDir, "fish"), { recursive: true });
 mkdirSync(join(publicDir, "hero"), { recursive: true });
 mkdirSync(join(publicDir, "about"), { recursive: true });
 mkdirSync(join(publicDir, "offers"), { recursive: true });
+mkdirSync(join(publicDir, "owner"), { recursive: true });
+mkdirSync(join(publicDir, "videos"), { recursive: true });
+mkdirSync(join(publicDir, "social"), { recursive: true });
 
 fishList.forEach((name, index) => {
   const colors = PALETTES[index % PALETTES.length];
@@ -129,5 +148,86 @@ const aboutSvg = card({
   `,
 });
 writeFileSync(join(publicDir, "about", "about-fresh-selection.svg"), aboutSvg, "utf8");
+
+// Process story — "From Water to Your Table"
+const processSvg = card({
+  width: 960,
+  height: 1200,
+  colors: ["#062a3a", "#075985"],
+  label: "From Water To Table",
+  caption: "Demo image — replace in /public/images/about",
+  silhouette: `
+    ${fishSilhouette(480, 420, 1.5)}
+    ${shrimpSilhouette(480, 760, 1)}
+  `,
+});
+writeFileSync(join(publicDir, "about", "process-story.svg"), processSvg, "utf8");
+
+// Owner portrait — square, face-cropped-friendly
+const ownerSvg = card({
+  width: 800,
+  height: 800,
+  colors: ["#075985", "#0ea5c6"],
+  label: "Owner",
+  caption: "Demo portrait — replace in /public/images/owner",
+  silhouette: personSilhouette(400, 420, 1.4),
+});
+writeFileSync(join(publicDir, "owner", "owner.svg"), ownerSvg, "utf8");
+
+// Video posters — landscape 16:9, with a subtle play-icon overlay
+const videoPosters = [
+  { name: "selection", label: "Selection", silhouette: fishSilhouette(660, 340, 1.4) },
+  { name: "cleaning", label: "Cleaning", silhouette: fishSilhouette(660, 340, 1.2, true) },
+  { name: "packaging", label: "Packaging", silhouette: shrimpSilhouette(660, 340, 1.1) },
+];
+videoPosters.forEach(({ name, label, silhouette }, index) => {
+  const colors = PALETTES[(index + 2) % PALETTES.length];
+  const svg = card({
+    width: 960,
+    height: 540,
+    colors,
+    label,
+    caption: "Demo video poster — replace in /public/images/videos",
+    silhouette: `${silhouette}${playIconOverlay(480, 270, 56)}`,
+  });
+  writeFileSync(join(publicDir, "videos", `${name}.svg`), svg, "utf8");
+});
+
+// Social reel thumbnails — vertical 9:16
+const reels = [
+  { name: "reel-1", label: "Reel 1" },
+  { name: "reel-2", label: "Reel 2" },
+  { name: "reel-3", label: "Reel 3" },
+];
+reels.forEach(({ name, label }, index) => {
+  const colors = PALETTES[(index + 4) % PALETTES.length];
+  const svg = card({
+    width: 540,
+    height: 960,
+    colors,
+    label,
+    caption: "Demo reel — replace in /public/images/social",
+    silhouette: `${fishSilhouette(270, 420, 1.1, index % 2 === 0)}${playIconOverlay(270, 480, 52)}`,
+  });
+  writeFileSync(join(publicDir, "social", `${name}.svg`), svg, "utf8");
+});
+
+// Offer banners — landscape
+const offerBanners = [
+  { name: "weekend-catch", label: "Weekend Catch" },
+  { name: "bulk-order", label: "Bulk Orders" },
+];
+offerBanners.forEach(({ name, label }, index) => {
+  const colors = PALETTES[(index + 1) % PALETTES.length];
+  const svg = card({
+    width: 800,
+    height: 600,
+    colors,
+    label,
+    caption: "Demo image — replace in /public/images/offers",
+    silhouette: fishSilhouette(400, 300, 1.2, index % 2 === 1),
+  });
+  writeFileSync(join(publicDir, "offers", `${name}.svg`), svg, "utf8");
+});
 
 console.log("Placeholder images generated in public/images/");

@@ -2,28 +2,55 @@
 
 @theme inline {
   /* ----------------------------------------------------------
-     Brand palette — premium fresh-seafood tones.
+     Brand palette — deep ocean / premium fresh-seafood tones.
      Change these to re-theme the entire site.
   ---------------------------------------------------------- */
-  --color-navy: #082f49;
-  --color-ocean: #0369a1;
-  --color-aqua: #0891b2;
-  --color-mint: #ccfbf1;
-  --color-offwhite: #f8fafc;
-  --color-dark: #0f172a;
+  --color-navy: #062a3a; /* Deep Ocean */
+  --color-ocean: #075985; /* Ocean */
+  --color-aqua: #0ea5c6; /* Aqua */
+  --color-mint: #cffaf0; /* soft seafoam accent */
+  --color-offwhite: #eef8fa; /* Mist */
+  --color-dark: #0f172a; /* Ink */
 
-  --font-sans: var(--font-plus-jakarta);
+  /* Latin falls back to Devanagari automatically for Hindi text —
+     both are loaded via next/font in the locale layout. */
+  --font-sans: var(--font-plus-jakarta), var(--font-noto-devanagari), sans-serif;
 
-  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
-  @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
+  @keyframes caustic-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.7;
     }
-    to {
+    50% {
+      transform: translate(4%, 3%) scale(1.08);
       opacity: 1;
-      transform: translateY(0);
+    }
+  }
+
+  @keyframes wave-drift {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-120px);
+    }
+  }
+
+  @keyframes bubble-rise {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.6;
+    }
+    90% {
+      opacity: 0.35;
+    }
+    100% {
+      transform: translateY(-320px) translateX(12px);
+      opacity: 0;
     }
   }
 }
@@ -65,9 +92,31 @@
   }
 }
 
-/* Utility for the subtle mobile contact-bar safe-area padding */
+/* Ambient hero animations (see UnderwaterScene). Kept out of the
+   reduced-motion-sensitive component tree entirely when the user
+   prefers reduced motion; the rule above also neutralizes them. */
 @layer utilities {
   .pb-safe {
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .animate-caustic-drift {
+    animation: caustic-drift 14s ease-in-out infinite;
+  }
+
+  .animate-caustic-drift-slow {
+    animation: caustic-drift 20s ease-in-out infinite reverse;
+  }
+
+  .animate-wave-drift {
+    animation: wave-drift 18s linear infinite;
+  }
+
+  .animate-wave-drift-slow {
+    animation: wave-drift 26s linear infinite reverse;
+  }
+
+  .animate-bubble-rise {
+    animation: bubble-rise linear infinite;
   }
 }

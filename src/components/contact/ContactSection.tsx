@@ -1,10 +1,13 @@
-import { business } from "@/data/business";
+import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 import { CallButton } from "@/components/shared/CallButton";
 import { Icon } from "@/components/shared/Icon";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import type { Locale } from "@/i18n/locales";
+import type { Dictionary } from "@/i18n/getDictionary";
+import type { BusinessConfig } from "@/data/business";
 
 const socialConfig = [
   { key: "instagram" as const, label: "Instagram" },
@@ -12,7 +15,19 @@ const socialConfig = [
   { key: "youtube" as const, label: "YouTube" },
 ];
 
-export function ContactSection({ showHeading = true }: { showHeading?: boolean }) {
+export function ContactSection({
+  locale,
+  dict,
+  business,
+  showHeading = true,
+  showOwner = false,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  business: BusinessConfig;
+  showHeading?: boolean;
+  showOwner?: boolean;
+}) {
   const socials = socialConfig.filter((item) => business[item.key]);
 
   return (
@@ -21,9 +36,9 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
         {showHeading && (
           <ScrollReveal>
             <SectionHeading
-              eyebrow="Contact"
-              title="Get In Touch"
-              description="The fastest way to check today's fresh catch is a quick WhatsApp message."
+              eyebrow={dict.contact.eyebrow}
+              title={dict.contact.heading}
+              description={dict.contact.description}
               align="center"
             />
           </ScrollReveal>
@@ -32,9 +47,21 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
         <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <ScrollReveal className="lg:col-span-2">
             <div className="grid h-full grid-cols-1 gap-6 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-dark/5 sm:grid-cols-2">
+              {showOwner && (
+                <div className="flex items-center gap-4 sm:col-span-2">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full ring-2 ring-mint/60">
+                    <Image src={business.owner.image} alt={business.owner.name} fill sizes="64px" className="object-cover" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-dark">{business.owner.name}</p>
+                    <p className="text-xs text-dark/50">{business.owner.role}</p>
+                  </div>
+                </div>
+              )}
+
               <div>
                 <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ocean">
-                  <Icon name="map-pin" className="h-4 w-4" /> Visit Us
+                  <Icon name="map-pin" className="h-4 w-4" /> {dict.contact.visitUs}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-dark/70">
                   {business.address}
@@ -50,14 +77,14 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
                     rel="noopener noreferrer"
                     className="mt-3 inline-block text-sm font-semibold text-ocean hover:text-navy"
                   >
-                    Get Directions &rarr;
+                    {dict.common.getDirections} &rarr;
                   </a>
                 )}
               </div>
 
               <div>
                 <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ocean">
-                  <Icon name="clock" className="h-4 w-4" /> Opening Hours
+                  <Icon name="clock" className="h-4 w-4" /> {dict.contact.openingHours}
                 </h3>
                 <ul className="mt-3 space-y-1 text-sm text-dark/70">
                   {business.openingHours.map((entry) => (
@@ -70,7 +97,7 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
 
               <div className="sm:col-span-2">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-ocean">
-                  Phone &amp; Email
+                  {dict.contact.phoneEmail}
                 </h3>
                 <div className="mt-3 flex flex-col gap-1 text-sm text-dark/70">
                   <a href={`tel:${business.phone}`} className="hover:text-ocean">
@@ -85,7 +112,7 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
               {socials.length > 0 && (
                 <div className="sm:col-span-2">
                   <h3 className="text-sm font-semibold uppercase tracking-wider text-ocean">
-                    Follow Us
+                    {dict.contact.followUs}
                   </h3>
                   <div className="mt-3 flex gap-3">
                     {socials.map((social) => (
@@ -108,13 +135,14 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
 
           <ScrollReveal delay={0.1}>
             <div className="flex h-full flex-col justify-center gap-4 rounded-2xl bg-navy p-8 text-offwhite shadow-sm">
-              <h3 className="text-lg font-bold">Ready to order?</h3>
-              <p className="text-sm text-offwhite/70">
-                Message us for today&apos;s availability and pricing — we typically reply within
-                minutes during business hours.
-              </p>
-              <WhatsAppButton variant="light" className="w-full" />
-              <CallButton variant="outline" className="w-full border-offwhite/20 text-offwhite hover:border-aqua hover:text-aqua" />
+              <h3 className="text-lg font-bold">{dict.contact.readyToOrder}</h3>
+              <p className="text-sm text-offwhite/70">{dict.contact.readyToOrderBody}</p>
+              <WhatsAppButton locale={locale} variant="light" className="w-full" />
+              <CallButton
+                locale={locale}
+                variant="outline"
+                className="w-full border-offwhite/20 text-offwhite hover:border-aqua hover:text-aqua"
+              />
             </div>
           </ScrollReveal>
         </div>

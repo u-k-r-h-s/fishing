@@ -1,4 +1,6 @@
 import { business } from "@/data/business";
+import type { Locale } from "@/i18n/locales";
+import { getDictionary, tf } from "@/i18n/getDictionary";
 
 /** Strips everything except leading "+" and digits, for wa.me links. */
 function toWhatsAppNumber(raw: string): string {
@@ -6,14 +8,15 @@ function toWhatsAppNumber(raw: string): string {
 }
 
 /**
- * Builds a wa.me link with a prefilled message.
+ * Builds a wa.me link with a prefilled message in the given locale.
  * Falls back to the general enquiry message when no fish name is given.
  */
-export function getWhatsAppLink(fishName?: string): string {
+export function getWhatsAppLink(locale: Locale, fishName?: string): string {
   const number = toWhatsAppNumber(business.whatsapp);
+  const dict = getDictionary(locale);
   const message = fishName
-    ? `Hi ${business.name}, I am interested in ${fishName}. Please share today's availability and price.`
-    : `Hi ${business.name}, I would like to know today's fresh fish availability and prices.`;
+    ? tf(dict.whatsapp.messageFish, { business: business.name, name: fishName })
+    : tf(dict.whatsapp.messageGeneral, { business: business.name });
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }

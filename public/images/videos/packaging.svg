@@ -1,0 +1,23 @@
+<svg width="960" height="540" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Packaging placeholder image">
+  <defs>
+    <linearGradient id="g-packaging" x1="0" y1="0" x2="960" y2="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c4a6e"/>
+      <stop offset="1" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#g-packaging)"/>
+  <path d="M0 120 Q 150 90, 300 120 T 600 120 T 900 120" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 210 Q 150 180, 300 210 T 600 210 T 900 210" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 300 Q 150 270, 300 300 T 600 300 T 900 300" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 390 Q 150 360, 300 390 T 600 390 T 900 390" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 480 Q 150 450, 300 480 T 600 480 T 900 480" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/>
+  
+  <g transform="translate(660, 340) scale(1.1)" fill="none" stroke="rgba(248,250,252,0.92)" stroke-width="10" stroke-linecap="round">
+    <path d="M-120 40c10-70 60-120 130-120 50 0 70 30 70 60 0 20-10 34-26 44 30 4 54 22 54 50 0 34-34 56-78 56-70 0-120-40-150-90Z"/>
+    <path d="M-40-60c14-18 34-30 56-34" />
+    <path d="M-20-40c10-14 26-24 42-28" />
+    <circle cx="-96" cy="-4" r="7" fill="rgba(248,250,252,0.92)" stroke="none"/>
+  </g>
+  <g>
+    <circle cx="480" cy="270" r="56" fill="rgba(6,42,58,0.55)" />
+    <path d="M464.32 246.48 L464.32 293.52 L506.88 270 Z" fill="rgba(248,250,252,0.95)" />
+  </g>
+  <text x="480" y="504" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="rgba(248,250,252,0.9)" letter-spacing="2">PACKAGING</text>
+  <text x="480" y="526" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="rgba(248,250,252,0.55)">Demo video poster — replace in /public/images/videos</text>
+</svg>

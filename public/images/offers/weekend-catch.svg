@@ -1,0 +1,18 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weekend Catch placeholder image">
+  <defs>
+    <linearGradient id="g-weekend-catch" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0369a1"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g-weekend-catch)"/>
+  <path d="M0 120 Q 150 90, 300 120 T 600 120 T 900 120" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 210 Q 150 180, 300 210 T 600 210 T 900 210" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 300 Q 150 270, 300 300 T 600 300 T 900 300" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 390 Q 150 360, 300 390 T 600 390 T 900 390" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 480 Q 150 450, 300 480 T 600 480 T 900 480" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/>
+  
+  <g transform="translate(400, 300) scale(1.2)" fill="rgba(248,250,252,0.92)">
+    <path d="M-90 0c20-38 64-64 110-64 36 0 66 14 92 36 10-16 26-30 44-38-4 20-4 40 0 60-4 20-4 40 0 60-18-8-34-22-44-38-26 22-56 36-92 36-46 0-90-26-110-64Z"/>
+    <circle cx="-38" cy="-8" r="6" fill="#0f172a"/>
+    <path d="M-92 2c-14 4-26 12-34 22 6 2 14 2 22 0-2 10-8 18-16 24 16 2 30-4 40-14" fill="none" stroke="rgba(248,250,252,0.92)" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <text x="400" y="564" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="rgba(248,250,252,0.9)" letter-spacing="2">WEEKEND CATCH</text>
+  <text x="400" y="586" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="rgba(248,250,252,0.55)">Demo image — replace in /public/images/offers</text>
+</svg>

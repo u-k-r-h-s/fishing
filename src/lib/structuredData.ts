@@ -1,21 +1,27 @@
-import { business } from "@/data/business";
 import type { Fish } from "@/data/fish";
-import { faqs } from "@/data/faqs";
-import { serviceAreas } from "@/data/serviceAreas";
-import { absoluteUrl } from "@/lib/utils";
+import type { FAQ } from "@/data/faqs";
+import type { BusinessConfig } from "@/data/business";
+import { absoluteUrl, localizedPath } from "@/lib/utils";
+import type { Locale } from "@/i18n/locales";
+import { localize } from "@/i18n/types";
+import type { Localized } from "@/i18n/types";
 
 /**
- * JSON-LD builders. Every value is pulled from the real business
- * configuration — nothing here is fabricated.
+ * JSON-LD builders. Every value is passed in by the caller (fetched from
+ * Supabase via src/lib/data/*) — nothing here is fabricated.
  */
 
-export function getLocalBusinessSchema() {
+export function getLocalBusinessSchema(
+  locale: Locale,
+  business: BusinessConfig,
+  serviceAreas: Localized<string>[]
+) {
   return {
     "@context": "https://schema.org",
     "@type": "FoodEstablishment",
     "@id": absoluteUrl("/#business"),
     name: business.name,
-    description: business.description,
+    description: localize(business.description, locale),
     image: absoluteUrl("/images/hero/hero-fish.svg"),
     telephone: business.phone,
     email: business.email,
@@ -34,23 +40,23 @@ export function getLocalBusinessSchema() {
       dayOfWeek: entry.days,
       description: entry.hours,
     })),
-    areaServed: serviceAreas,
+    areaServed: serviceAreas.map((area) => localize(area, locale)),
     sameAs: [business.instagram, business.facebook, business.youtube].filter(Boolean),
   };
 }
 
-export function getProductSchema(item: Fish) {
+export function getProductSchema(locale: Locale, item: Fish, businessName: string) {
   const priceValue = parseFloat(item.price.replace(/[^\d.]/g, "")) || undefined;
 
   return {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: `Fresh ${item.name}`,
-    description: item.description,
+    name: `Fresh ${localize(item.name, locale)}`,
+    description: localize(item.description, locale),
     image: absoluteUrl(item.image),
     brand: {
       "@type": "Brand",
-      name: business.name,
+      name: businessName,
     },
     offers: {
       "@type": "Offer",
@@ -59,31 +65,31 @@ export function getProductSchema(item: Fish) {
       availability: item.available
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
-      url: absoluteUrl(`/fresh-fish/${item.id}`),
+      url: absoluteUrl(localizedPath(locale, `/fresh-fish/${item.id}`)),
       seller: {
         "@type": "Organization",
-        name: business.name,
+        name: businessName,
       },
     },
   };
 }
 
-export function getFAQPageSchema() {
+export function getFAQPageSchema(locale: Locale, faqs: FAQ[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
       "@type": "Question",
-      name: faq.question,
+      name: localize(faq.question, locale),
       acceptedAnswer: {
         "@type": "Answer",
-        text: faq.answer,
+        text: localize(faq.answer, locale),
       },
     })),
   };
 }
 
-export function getBreadcrumbSchema(items: Array<{ name: string; path: string }>) {
+export function getBreadcrumbSchema(locale: Locale, items: Array<{ name: string; path: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -91,7 +97,7 @@ export function getBreadcrumbSchema(items: Array<{ name: string; path: string }>
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: absoluteUrl(item.path),
+      item: absoluteUrl(localizedPath(locale, item.path)),
     })),
   };
 }

@@ -1,0 +1,27 @@
+<svg width="960" height="1200" viewBox="0 0 960 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="From Water To Table placeholder image">
+  <defs>
+    <linearGradient id="g-from-water-to-table" x1="0" y1="0" x2="960" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#062a3a"/>
+      <stop offset="1" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="1200" fill="url(#g-from-water-to-table)"/>
+  <path d="M0 120 Q 150 90, 300 120 T 600 120 T 900 120" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 210 Q 150 180, 300 210 T 600 210 T 900 210" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 300 Q 150 270, 300 300 T 600 300 T 900 300" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 390 Q 150 360, 300 390 T 600 390 T 900 390" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/><path d="M0 480 Q 150 450, 300 480 T 600 480 T 900 480" stroke="rgba(248,250,252,0.08)" stroke-width="2" fill="none"/>
+  
+    
+  <g transform="translate(480, 420) scale(1.5)" fill="rgba(248,250,252,0.92)">
+    <path d="M-90 0c20-38 64-64 110-64 36 0 66 14 92 36 10-16 26-30 44-38-4 20-4 40 0 60-4 20-4 40 0 60-18-8-34-22-44-38-26 22-56 36-92 36-46 0-90-26-110-64Z"/>
+    <circle cx="-38" cy="-8" r="6" fill="#0f172a"/>
+    <path d="M-92 2c-14 4-26 12-34 22 6 2 14 2 22 0-2 10-8 18-16 24 16 2 30-4 40-14" fill="none" stroke="rgba(248,250,252,0.92)" stroke-width="6" stroke-linecap="round"/>
+  </g>
+    
+  <g transform="translate(480, 760) scale(1)" fill="none" stroke="rgba(248,250,252,0.92)" stroke-width="10" stroke-linecap="round">
+    <path d="M-120 40c10-70 60-120 130-120 50 0 70 30 70 60 0 20-10 34-26 44 30 4 54 22 54 50 0 34-34 56-78 56-70 0-120-40-150-90Z"/>
+    <path d="M-40-60c14-18 34-30 56-34" />
+    <path d="M-20-40c10-14 26-24 42-28" />
+    <circle cx="-96" cy="-4" r="7" fill="rgba(248,250,252,0.92)" stroke="none"/>
+  </g>
+  
+  <text x="480" y="1164" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="rgba(248,250,252,0.9)" letter-spacing="2">FROM WATER TO TABLE</text>
+  <text x="480" y="1186" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="rgba(248,250,252,0.55)">Demo image — replace in /public/images/about</text>
+</svg>

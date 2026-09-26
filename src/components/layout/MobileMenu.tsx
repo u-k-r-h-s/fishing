@@ -4,11 +4,15 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import gsap from "gsap";
-import { business } from "@/data/business";
 import { navLinks } from "@/data/navigation";
+import type { BusinessConfig } from "@/data/business";
 import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 import { CallButton } from "@/components/shared/CallButton";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { Icon } from "@/components/shared/Icon";
+import { localizedPath } from "@/lib/utils";
+import type { Locale } from "@/i18n/locales";
+import type { Dictionary } from "@/i18n/getDictionary";
 
 const emptySubscribe = () => () => {};
 
@@ -21,7 +25,15 @@ function useMounted() {
   );
 }
 
-export function MobileMenu() {
+export function MobileMenu({
+  locale,
+  dict,
+  business,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  business: BusinessConfig;
+}) {
   const [open, setOpen] = useState(false);
   const mounted = useMounted();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -36,12 +48,17 @@ export function MobileMenu() {
     const ctx = gsap.context(() => {
       if (open) {
         gsap.set(panel, { display: "flex" });
-        gsap.set(overlay, { display: "block" });
+        gsap.set(overlay, { display: "block", pointerEvents: "none" });
         gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" });
         gsap.fromTo(
           panel,
           { xPercent: 100 },
-          { xPercent: 0, duration: 0.4, ease: "power3.out" }
+          {
+            xPercent: 0,
+            duration: 0.4,
+            ease: "power3.out",
+            onComplete: () => gsap.set(overlay, { pointerEvents: "auto" }),
+          }
         );
         gsap.fromTo(
           linkRefs.current,
@@ -82,7 +99,7 @@ export function MobileMenu() {
     <div className="md:hidden">
       <button
         type="button"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? dict.nav.closeMenu : dict.nav.openMenu}
         aria-expanded={open}
         aria-controls="mobile-menu-panel"
         onClick={() => setOpen((v) => !v)}
@@ -115,11 +132,11 @@ export function MobileMenu() {
               aria-label="Mobile navigation"
               className="fixed inset-y-0 right-0 z-50 hidden w-[82%] max-w-sm flex-col bg-offwhite px-6 py-6 shadow-2xl"
             >
-              <div className="mb-8 flex items-center justify-between">
+              <div className="mb-6 flex items-center justify-between">
                 <span className="text-lg font-extrabold text-navy">{business.name}</span>
                 <button
                   type="button"
-                  aria-label="Close menu"
+                  aria-label={dict.nav.closeMenu}
                   onClick={() => setOpen(false)}
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-dark/10"
                 >
@@ -127,23 +144,25 @@ export function MobileMenu() {
                 </button>
               </div>
 
+              <LanguageSwitcher locale={locale} ariaLabel={dict.nav.language} className="mb-4" />
+
               <ul className="flex flex-col gap-1">
                 {navLinks.map((link, index) => (
                   <li key={link.href} ref={(el) => { linkRefs.current[index] = el; }}>
                     <Link
-                      href={link.href}
+                      href={localizedPath(locale, link.href)}
                       onClick={() => setOpen(false)}
                       className="block rounded-lg px-3 py-3 text-base font-semibold text-dark hover:bg-mint/40"
                     >
-                      {link.label}
+                      {dict.nav[link.labelKey]}
                     </Link>
                   </li>
                 ))}
               </ul>
 
               <div className="mt-auto flex flex-col gap-3 pt-6">
-                <WhatsAppButton className="w-full" />
-                <CallButton className="w-full" />
+                <WhatsAppButton locale={locale} className="w-full" />
+                <CallButton locale={locale} className="w-full" />
               </div>
             </div>
           </>,

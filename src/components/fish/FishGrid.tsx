@@ -4,8 +4,18 @@ import { useRef } from "react";
 import type { Fish } from "@/data/fish";
 import { FishCard } from "@/components/fish/FishCard";
 import { gsap, ensureGsapPlugins, useIsomorphicLayoutEffect } from "@/lib/gsapConfig";
+import type { Locale } from "@/i18n/locales";
+import type { Dictionary } from "@/i18n/getDictionary";
 
-export function FishGrid({ items }: { items: Fish[] }) {
+export function FishGrid({
+  items,
+  locale,
+  dict,
+}: {
+  items: Fish[];
+  locale: Locale;
+  dict: Dictionary;
+}) {
   const gridRef = useRef<HTMLDivElement>(null);
 
   useIsomorphicLayoutEffect(() => {
@@ -60,7 +70,7 @@ export function FishGrid({ items }: { items: Fish[] }) {
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
     >
       {items.map((item) => (
-        <FishCard key={item.id} item={item} />
+        <FishCard key={item.id} item={item} locale={locale} dict={dict} />
       ))}
     </div>
   );

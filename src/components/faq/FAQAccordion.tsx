@@ -4,8 +4,10 @@ import { useState } from "react";
 import type { FAQ } from "@/data/faqs";
 import { Icon } from "@/components/shared/Icon";
 import { cn } from "@/lib/utils";
+import { localize } from "@/i18n/types";
+import type { Locale } from "@/i18n/locales";
 
-export function FAQAccordion({ items }: { items: FAQ[] }) {
+export function FAQAccordion({ items, locale }: { items: FAQ[]; locale: Locale }) {
   const [openId, setOpenId] = useState<string | null>(items[0]?.id ?? null);
 
   if (items.length === 0) return null;
@@ -25,7 +27,7 @@ export function FAQAccordion({ items }: { items: FAQ[] }) {
                 onClick={() => setOpenId(isOpen ? null : faq.id)}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="font-semibold text-dark">{faq.question}</span>
+                <span className="font-semibold text-dark">{localize(faq.question, locale)}</span>
                 <Icon
                   name="chevron-down"
                   className={cn(
@@ -45,7 +47,9 @@ export function FAQAccordion({ items }: { items: FAQ[] }) {
               )}
             >
               <div className="overflow-hidden">
-                <p className="px-6 pb-5 text-sm leading-relaxed text-dark/65">{faq.answer}</p>
+                <p className="px-6 pb-5 text-sm leading-relaxed text-dark/65">
+                  {localize(faq.answer, locale)}
+                </p>
               </div>
             </div>
           </div>
