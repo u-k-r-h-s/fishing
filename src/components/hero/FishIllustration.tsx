@@ -31,9 +31,9 @@ import type { HeroFishSpecies } from "./fishConfig";
  *   way to mirror a fish for its swim direction; if your source photos
  *   face left instead, flip that convention in swimFish.ts to match.
  *
- * Until a real photo exists at a given path, this renders a clearly
- * labelled placeholder box instead of silently reusing the old SVG art —
- * so a missing asset is obvious in development, not invisible.
+ * Until a real photo exists at a given path, this renders nothing (not the
+ * old SVG art, and not a visible placeholder box) — check the Network tab
+ * or console for 404s on the paths above to see which assets are missing.
  */
 export function FishIllustration({
   species,
@@ -58,27 +58,7 @@ export function FishIllustration({
   }, [species.id]);
 
   if (missing) {
-    return (
-      <div
-        className={className}
-        style={{
-          aspectRatio: "2.1 / 1",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 999,
-          border: "1px dashed rgba(238,248,250,0.55)",
-          background: "rgba(238,248,250,0.08)",
-          color: "rgba(238,248,250,0.8)",
-          fontSize: 8,
-          lineHeight: 1.15,
-          textAlign: "center",
-          padding: 2,
-        }}
-      >
-        {species.id}.webp missing
-      </div>
-    );
+    return null;
   }
 
   return (
