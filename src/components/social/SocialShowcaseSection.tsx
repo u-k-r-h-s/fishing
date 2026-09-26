@@ -40,7 +40,16 @@ export function SocialShowcaseSection({
           />
         </ScrollReveal>
 
-        <div className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
+        {/*
+          The middle column is a fixed px width (matching SocialPhoneMockup's
+          own max-w-[300px]), not `auto` — an auto-sized grid track can't
+          reliably size itself around a 100%-width child (the phone mockup's
+          root div is `w-full`), so it was collapsing to near-zero, taking
+          the whole phone mockup down with it and leaving only
+          absolutely-positioned fixed-size children (like the speaker pill)
+          visibly floating in the leftover space.
+        */}
+        <div className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_300px_1fr]">
           <div className="order-2 hidden flex-col gap-3 lg:order-1 lg:flex">
             {posts.slice(0, Math.ceil(posts.length / 2)).map((post) => (
               <ReelThumb
