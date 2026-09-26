@@ -132,7 +132,17 @@ export function UnderwaterScene() {
                 style={{
                   top: `${cfg.top}%`,
                   width: cfg.size,
-                  filter: LAYER_STYLE[layer].blurPx ? `blur(${LAYER_STYLE[layer].blurPx}px)` : undefined,
+                  // Subtle underwater haze per depth layer — dimmer/less
+                  // saturated (not blue-tinted) the further back a fish is,
+                  // so a photographic cutout reads as "underwater" instead
+                  // of a sticker pasted on the background.
+                  filter: [
+                    LAYER_STYLE[layer].blurPx ? `blur(${LAYER_STYLE[layer].blurPx}px)` : "",
+                    `brightness(${LAYER_STYLE[layer].brightness})`,
+                    `saturate(${LAYER_STYLE[layer].saturate})`,
+                  ]
+                    .filter(Boolean)
+                    .join(" "),
                   willChange: "transform",
                 }}
               >

@@ -15,48 +15,54 @@ export interface FishController {
  * Builds (or rebuilds, on resize) the continuous swim loop for every fish
  * in the scene. Movement is a short multi-waypoint timeline rather than a
  * single straight tween, so each pass follows a gentle curve instead of a
- * flat line; a companion tail-flick tween runs independently and a slight
- * whole-body rotation "banks" the fish into its vertical drift.
+ * flat line, with a slight whole-body rotation "banking" the fish into its
+ * vertical drift. These are photographic fish (not SVG), so there's no
+ * independently-animatable tail segment to flick — the curve + banking
+ * rotation is the whole of the movement, deliberately not layering on
+ * anything that would make a photo look like it's being puppeted.
  */
 export function buildSwim(container: HTMLElement, isMobile: boolean): FishController[] {
   const fishEls = Array.from(container.querySelectorAll<HTMLElement>("[data-fish]"));
   const width = container.clientWidth;
   const controllers: FishController[] = [];
-  let backgroundIndex = 0;
+  let midgroundIndex = 0;
 
   fishEls.forEach((el) => {
     const cfg: FishInstanceConfig = JSON.parse(el.dataset.cfg ?? "null");
     if (!cfg) return;
 
-    // Mobile keeps the full midground/foreground cast (needed for a sense of
-    // depth) but thins the background layer by half — mirrors the density
-    // the original scene used, so busy backdrops don't hurt small-screen perf.
-    if (cfg.layer === "background") {
-      const shouldHide = isMobile && backgroundIndex % 2 === 1;
-      backgroundIndex += 1;
-      if (shouldHide) {
+    // Mobile keeps the hero spacious (3-5 fish) rather than a full desktop
+    // cast: drop the background layer entirely (it reads as visual noise at
+    // small sizes) and thin the midground by half, keeping every foreground
+    // fish for a clear sense of depth.
+    if (isMobile) {
+      if (cfg.layer === "background") {
         gsap.killTweensOf(el);
         gsap.set(el, { autoAlpha: 0 });
         return;
       }
+      if (cfg.layer === "midground") {
+        const shouldHide = midgroundIndex % 2 === 1;
+        midgroundIndex += 1;
+        if (shouldHide) {
+          gsap.killTweensOf(el);
+          gsap.set(el, { autoAlpha: 0 });
+          return;
+        }
+      }
     }
 
     const style = LAYER_STYLE[cfg.layer];
-    const tailEl = el.querySelector<SVGGElement>("[data-tail-target]");
 
     gsap.killTweensOf(el);
-    if (tailEl) gsap.killTweensOf(tailEl);
 
     const travel = width * 0.7 + cfg.size * 2;
     const startX = cfg.direction === 1 ? -cfg.size * 1.5 : width + cfg.size * 1.5;
     const endX = cfg.direction === 1 ? startX + travel : startX - travel;
-    // The illustration's un-flipped (scaleX > 0) orientation has the head on
-    // its LEFT and tail on its RIGHT (see FishIllustration.tsx's geometry —
-    // eye at low x, tail path at high x). direction === 1 means the fish
-    // travels rightward, so it must be flipped (scaleX < 0) to face right;
-    // direction === -1 travels leftward, which already matches the
-    // un-flipped head-left orientation.
-    const facingFlip = cfg.direction === 1 ? -1 : 1;
+    // The photo asset's un-flipped (scaleX > 0) orientation faces RIGHT
+    // (head on the image's right edge — see FishIllustration.tsx). Moving
+    // right (direction === 1) needs no flip; moving left needs scaleX < 0.
+    const facingFlip = cfg.direction === 1 ? 1 : -1;
 
     gsap.set(el, {
       x: startX,
@@ -87,18 +93,6 @@ export function buildSwim(container: HTMLElement, isMobile: boolean): FishContro
     }
     tl.set(el, { x: startX, y: 0, rotation: 0 });
 
-    // Independent tail flick — a quick, continuous side-to-side pivot.
-    if (tailEl) {
-      gsap.to(tailEl, {
-        rotation: 16,
-        duration: 0.45,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: cfg.delay * 0.2,
-      });
-    }
-
     let evadeTween: gsap.core.Tween | null = null;
 
     controllers.push({
@@ -121,7 +115,15 @@ export function buildSwim(container: HTMLElement, isMobile: boolean): FishContro
       },
       catchFish: (respawnDelayMs) => {
         tl.pause();
-        gsap.to(el, { opacity: 0, scale: style.scale * 0.6, duration: 0.7, ease: "power1.in" });
+        // A brief upward drift-and-shrink, as if being drawn up toward the
+        // net, then a gentle fade — not an instant disappearance.
+        gsap.to(el, {
+          y: "-=18",
+          scale: `*=0.85`,
+          duration: 0.5,
+          ease: "power1.out",
+        });
+        gsap.to(el, { opacity: 0, duration: 0.6, delay: 0.4, ease: "power1.in" });
         gsap.delayedCall(respawnDelayMs / 1000, () => {
           gsap.set(el, { x: startX, y: 0, rotation: 0, scaleX: style.scale * facingFlip, scaleY: style.scale, opacity: style.opacity });
           tl.restart();

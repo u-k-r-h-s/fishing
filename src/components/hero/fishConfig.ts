@@ -7,34 +7,26 @@
  * hero shows the actual fish this business sells — no invented
  * tropical/decorative species.
  *
- * `body` selects an illustrated silhouette archetype (see
- * FishIllustration.tsx): carp-like (rohu/katla), round/deep-bodied
- * (tilapia), disc-shaped (pomfret), or torpedo-shaped (surmai).
- * These are DEMO illustrations — see the README note in
- * FishIllustration.tsx for what to replace them with.
+ * `id` is also the asset filename FishIllustration.tsx looks for
+ * (public/images/fish/hero/{id}.webp) — see that file for the
+ * exact photo requirements and orientation convention.
  * ============================================================
  */
 
-export type FishBody = "carp" | "round" | "disc" | "torpedo";
 export type FishLayer = "background" | "midground" | "foreground";
 
 export interface HeroFishSpecies {
   id: string;
   /** Catalogue slug this matches, for reference/documentation only. */
   catalogueId: string;
-  body: FishBody;
-  /** Body gradient — light (top/belly highlight) to dark (top/back shadow). */
-  colors: { light: string; mid: string; dark: string };
-  /** Subtle marking accent (e.g. Surmai's faint spots) — omit for a plain body. */
-  spots?: boolean;
 }
 
 export const HERO_SPECIES: HeroFishSpecies[] = [
-  { id: "rohu", catalogueId: "rohu", body: "carp", colors: { light: "#cfe9f2", mid: "#7fb3c9", dark: "#2f5a6e" } },
-  { id: "katla", catalogueId: "katla", body: "carp", colors: { light: "#d7e6e2", mid: "#8aa9a2", dark: "#3a5450" } },
-  { id: "tilapia", catalogueId: "tilapia", body: "round", colors: { light: "#dce6d2", mid: "#93a67e", dark: "#42523a" } },
-  { id: "pomfret", catalogueId: "pomfret", body: "disc", colors: { light: "#eef2f5", mid: "#b9c6cd", dark: "#5c6c74" } },
-  { id: "surmai", catalogueId: "surmai", body: "torpedo", colors: { light: "#cfe0ea", mid: "#5f86a0", dark: "#243c4c" }, spots: true },
+  { id: "rohu", catalogueId: "rohu" },
+  { id: "katla", catalogueId: "katla" },
+  { id: "tilapia", catalogueId: "tilapia" },
+  { id: "pomfret", catalogueId: "pomfret" },
+  { id: "surmai", catalogueId: "surmai" },
 ];
 
 export interface FishInstanceConfig {
@@ -52,36 +44,44 @@ export interface FishInstanceConfig {
   curveAmplitude: number;
 }
 
-/** Per-layer visual depth treatment. */
+/**
+ * Per-layer visual depth treatment. `brightness`/`saturate` give distant
+ * fish a subtle underwater-haze look (dimmer, slightly less saturated —
+ * not blue-tinted) instead of just blurring them; foreground fish get
+ * full, undimmed color since they're "closer to the camera".
+ */
 export const LAYER_STYLE: Record<
   FishLayer,
-  { scale: number; opacity: number; blurPx: number; parallax: number; z: number }
+  { scale: number; opacity: number; blurPx: number; brightness: number; saturate: number; parallax: number; z: number }
 > = {
-  background: { scale: 0.55, opacity: 0.38, blurPx: 1.5, parallax: 0.12, z: 1 },
-  midground: { scale: 0.8, opacity: 0.7, blurPx: 0.4, parallax: 0.35, z: 2 },
-  foreground: { scale: 1.15, opacity: 0.98, blurPx: 0, parallax: 0.85, z: 3 },
+  background: { scale: 0.45, opacity: 0.55, blurPx: 1.5, brightness: 0.82, saturate: 0.82, parallax: 0.12, z: 1 },
+  midground: { scale: 0.75, opacity: 0.8, blurPx: 0.5, brightness: 0.92, saturate: 0.92, parallax: 0.35, z: 2 },
+  foreground: { scale: 1, opacity: 1, blurPx: 0, brightness: 1, saturate: 1, parallax: 0.85, z: 3 },
 };
 
 /**
  * The full fish cast. Always rendered (so SSR/first paint doesn't depend on
- * viewport width, avoiding a hydration mismatch); swimFish.ts thins out the
- * background layer on narrow screens by simply not animating/showing a few
- * of them, rather than this list changing shape per-render.
+ * viewport width, avoiding a hydration mismatch); swimFish.ts thins this
+ * down on narrow screens by simply not animating/showing some of them,
+ * rather than this list changing shape per-render. Sizes are the base (1x)
+ * width in px, before LAYER_STYLE's per-layer scale — background ~35-45px,
+ * midground ~65-80px, foreground ~95-110px once scaled, so distance reads
+ * clearly without any fish feeling oversized.
  */
 export function buildFishInstances(): FishInstanceConfig[] {
   const [rohu, katla, tilapia, pomfret, surmai] = HERO_SPECIES;
 
   return [
-    { species: rohu, layer: "background", top: 16, size: 46, duration: 36, delay: 0, direction: 1, curveAmplitude: 14 },
-    { species: tilapia, layer: "background", top: 64, size: 40, duration: 42, delay: 7, direction: -1, curveAmplitude: 10 },
-    { species: katla, layer: "background", top: 38, size: 44, duration: 48, delay: 15, direction: 1, curveAmplitude: 12 },
+    { species: rohu, layer: "background", top: 16, size: 78, duration: 36, delay: 0, direction: 1, curveAmplitude: 14 },
+    { species: tilapia, layer: "background", top: 64, size: 68, duration: 42, delay: 7, direction: -1, curveAmplitude: 10 },
+    { species: katla, layer: "background", top: 38, size: 74, duration: 48, delay: 15, direction: 1, curveAmplitude: 12 },
 
-    { species: pomfret, layer: "midground", top: 28, size: 66, duration: 27, delay: 2, direction: 1, curveAmplitude: 22 },
-    { species: surmai, layer: "midground", top: 72, size: 70, duration: 31, delay: 11, direction: -1, curveAmplitude: 18 },
-    { species: rohu, layer: "midground", top: 53, size: 58, duration: 23, delay: 18, direction: 1, curveAmplitude: 20 },
+    { species: pomfret, layer: "midground", top: 28, size: 92, duration: 27, delay: 2, direction: 1, curveAmplitude: 22 },
+    { species: surmai, layer: "midground", top: 72, size: 100, duration: 31, delay: 11, direction: -1, curveAmplitude: 18 },
+    { species: rohu, layer: "midground", top: 53, size: 84, duration: 23, delay: 18, direction: 1, curveAmplitude: 20 },
 
-    { species: surmai, layer: "foreground", top: 46, size: 96, duration: 20, delay: 1, direction: 1, curveAmplitude: 30 },
-    { species: katla, layer: "foreground", top: 67, size: 80, duration: 25, delay: 10, direction: -1, curveAmplitude: 26 },
+    { species: surmai, layer: "foreground", top: 46, size: 108, duration: 20, delay: 1, direction: 1, curveAmplitude: 30 },
+    { species: katla, layer: "foreground", top: 67, size: 92, duration: 25, delay: 10, direction: -1, curveAmplitude: 26 },
   ];
 }
 
@@ -103,4 +103,3 @@ export function randomBetween([min, max]: [number, number]): number {
 
 /** Vertical position (percent of hero height) of the water line — the boat sits just above it, the net drops just below it. */
 export const WATER_SURFACE_TOP_PERCENT = 14;
-
