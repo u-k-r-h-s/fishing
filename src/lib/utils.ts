@@ -7,7 +7,7 @@ export function cn(...classes: Array<string | false | null | undefined>): string
 
 /** Absolute site URL, used for canonical links, sitemap, and structured data. */
 export function getSiteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL || "https://oceanfresh-fish.example.com";
+  return process.env.NEXT_PUBLIC_SITE_URL || "https://aquascales.in";
 }
 
 export function absoluteUrl(path: string): string {
